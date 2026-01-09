@@ -1,0 +1,1522 @@
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    SECTION 1: PLATFORM ADMINISTRATION                        ║
+// ║  System-level entities for managing the SaaS platform itself                 ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table PlatformAdmin {
+  platformAdminId uuid [pk, note: 'Auto-generated UUID']
+  platformAdminEmail varchar [unique, not null, note: 'Login email for platform admin']
+  platformAdminPasswordHash varchar [not null, note: 'Hashed password']
+  platformAdminFirstName varchar [not null]
+  platformAdminLastName varchar [not null]
+  platformAdminRole varchar [not null, default: 'platformSupport', note: 'platformOwner | platformSupport']
+  platformAdminIsActive boolean [default: true]
+  platformAdminLastLogin timestamp
+  platformAdminCreatedAt timestamp [default: `now()`]
+  platformAdminUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Platform administrators manage the entire SaaS system.
+  - Platform Owner: Full access to all tenants and billing
+  - Platform Support: Customer support and troubleshooting
+  '''
+}
+
+// ============================================================================
+// SECTION 2: SUBSCRIPTION & BILLING
+// Plans and pricing for tenant subscriptions
+// ============================================================================
+
+Table SubscriptionPlan {
+  subscriptionPlanId uuid [pk]
+  subscriptionPlanName varchar [not null, note: 'e.g., Starter, Professional, Enterprise, Lifetime']
+  subscriptionPlanCode varchar [unique, not null, note: 'e.g., starter, pro, enterprise, lifetime']
+  subscriptionPlanDescription text
+  subscriptionPlanPaymentType varchar [default: 'recurring', note: 'recurring | oneTime | lifetime']
+  subscriptionPlanPriceMonthlyNgn decimal [note: 'Monthly price (for recurring plans)']
+  subscriptionPlanPriceYearlyNgn decimal [note: 'Yearly price (for recurring plans)']
+  subscriptionPlanPriceOneTimeNgn decimal [note: 'One-time payment price']
+  subscriptionPlanPriceLifetimeNgn decimal [note: 'Lifetime access price']
+  subscriptionPlanValidityDays int [note: 'For oneTime: days valid after purchase. Null = forever']
+  subscriptionPlanTrialDays int [default: 14, note: 'Free trial period']
+  subscriptionPlanMaxUsers int [default: -1, note: '-1 means unlimited']
+  subscriptionPlanMaxEmployees int [default: -1]
+  subscriptionPlanMaxCustomers int [default: -1]
+  subscriptionPlanMaxProducts int [default: -1]
+  subscriptionPlanMaxInvoicesPerMonth int [default: -1]
+  subscriptionPlanModulesIncluded jsonb [note: 'Array of app IDs included in plan']
+  subscriptionPlanFeatures jsonb [note: 'Additional feature flags']
+  subscriptionPlanIsActive boolean [default: true]
+  subscriptionPlanIsPopular boolean [default: false, note: 'Highlight on pricing page']
+  subscriptionPlanSortOrder int [default: 0]
+  subscriptionPlanCreatedAt timestamp [default: `now()`]
+  subscriptionPlanUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Defines available subscription tiers.
+
+  Payment Types:
+  - recurring: Use priceMonthlyNgn/priceYearlyNgn
+  - oneTime: Use priceOneTimeNgn + validityDays
+  - lifetime: Use priceLifetimeNgn (never expires)
+
+  Example Plans:
+  - Starter (recurring): ₦10,000/month or ₦100,000/year
+  - Professional (recurring): ₦25,000/month or ₦250,000/year
+  - Enterprise (oneTime): ₦500,000 for 1 year
+  - Lifetime Deal: ₦1,500,000 one-time, forever access
+
+  Apps: accounting, hr, sales, production, corporate-cards,
+        invoice, bank, fixed-assets, nrs-einvoice
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    SECTION 2B: APP/MODULE REGISTRY                           ║
+// ║  Available applications in the ERP platform                                  ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table App {
+  appId uuid [pk]
+  appCode varchar [unique, not null, note: 'Unique identifier: sales, hr, accounting, etc.']
+  appName varchar [not null, note: 'Display name: Sales, Human Resources, etc.']
+  appShortDescription varchar [not null, note: 'One-line description for app cards']
+  appDescription text [note: 'Full description for app details page']
+  appIcon varchar [note: 'Icon name or URL']
+  appColor varchar [note: 'Brand color for the app']
+  appBasePath varchar [not null, note: 'URL path: /sales, /hr, /accounting']
+  appIsCore boolean [default: false, note: 'Core apps cannot be disabled']
+  appIsActive boolean [default: true]
+  appSortOrder int [default: 0]
+  appCreatedAt timestamp [default: `now()`]
+  appUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Master list of all available ERP applications.
+
+  Example Apps with shortDescription:
+  - Sales: "Manage customers, leads, quotations and orders"
+  - HR: "Complete employee management and payroll"
+  - Accounting: "Double-entry bookkeeping and financial reports"
+  - Production: "Manufacturing orders and quality control"
+  - Invoice: "Create and send professional invoices"
+  - Bank: "Bank account management and reconciliation"
+  - Fixed Assets: "Track assets and depreciation"
+  - Corporate Cards: "Issue and manage company cards"
+  - NRS E-Invoice: "Nigerian tax compliance and e-invoicing"
+  '''
+}
+
+Table AppModule {
+  appModuleId uuid [pk]
+  appModuleAppId uuid [ref: > App.appId, not null]
+  appModuleCode varchar [not null, note: 'e.g., employees, payroll, leave']
+  appModuleName varchar [not null, note: 'e.g., Employees, Payroll, Leave Management']
+  appModuleDescription text
+  appModulePath varchar [note: 'Sub-path: /hr/employees, /hr/payroll']
+  appModuleIcon varchar
+  appModuleParentModuleId uuid [ref: > AppModule.appModuleId, note: 'For nested modules']
+  appModuleSortOrder int [default: 0]
+  appModuleIsActive boolean [default: true]
+  appModuleCreatedAt timestamp [default: `now()`]
+  appModuleUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Sub-modules within each app.
+  e.g., HR app has: Employees, Payroll, Leave, Attendance modules
+  '''
+}
+
+Table AppPermission {
+  appPermissionId uuid [pk]
+  appPermissionAppId uuid [ref: > App.appId, not null]
+  appPermissionModuleId uuid [ref: > AppModule.appModuleId, note: 'Null = app-level permission']
+  appPermissionCode varchar [not null, note: 'e.g., create, read, update, delete, export, approve']
+  appPermissionName varchar [not null, note: 'e.g., Create Employees, Approve Leave']
+  appPermissionDescription text
+  appPermissionCreatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Granular permissions for each app/module.
+  Standard CRUD + custom actions like approve, export, etc.
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    SECTION 3: MULTI-TENANCY CORE                             ║
+// ║  Core entities for multi-tenant architecture (company isolation)             ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table Tenant {
+  tenantId uuid [pk, note: 'Each tenant is a separate company']
+  tenantName varchar [not null, note: 'Company name']
+  tenantSlug varchar [unique, not null, note: 'URL-friendly identifier']
+  tenantSubdomain varchar [unique, note: 'Custom subdomain if enabled']
+  tenantLogoUrl varchar
+  tenantIndustry varchar [note: 'e.g., Manufacturing, Retail, Services']
+  tenantCompanySize varchar [note: '1-10 | 11-50 | 51-200 | 201-500 | 500+']
+  tenantAddress text
+  tenantCity varchar
+  tenantState varchar
+  tenantCountry varchar [default: 'Nigeria']
+  tenantPhone varchar
+  tenantEmail varchar [not null, note: 'Primary company email']
+  tenantWebsite varchar
+  tenantTaxId varchar [note: 'Tax Identification Number']
+  tenantRcNumber varchar [note: 'RC Number (Company Registration)']
+  tenantSettings jsonb [note: 'Custom tenant settings']
+  tenantOnboardingCompleted boolean [default: false]
+  tenantOnboardingStep int [default: 1]
+  tenantIsActive boolean [default: true]
+  tenantSuspendedAt timestamp
+  tenantSuspensionReason text
+  tenantCreatedAt timestamp [default: `now()`]
+  tenantUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  TENANT = COMPANY
+  Every piece of data in the system belongs to a tenant.
+  Complete data isolation between tenants.
+  '''
+}
+
+Table TenantSubscription {
+  tenantSubscriptionId uuid [pk]
+  tenantSubscriptionTenantId uuid [ref: > Tenant.tenantId, not null]
+  tenantSubscriptionPlanId uuid [ref: > SubscriptionPlan.subscriptionPlanId, not null]
+  tenantSubscriptionStatus varchar [default: 'trial', note: 'trial | active | paid | pastDue | cancelled | expired | lifetime']
+  tenantSubscriptionPaymentType varchar [default: 'recurring', note: 'recurring | oneTime | lifetime']
+  tenantSubscriptionBillingCycle varchar [note: 'monthly | yearly | null for oneTime/lifetime']
+  tenantSubscriptionAmount decimal [note: 'Amount paid for this subscription']
+  tenantSubscriptionCurrency varchar [default: 'NGN']
+  tenantSubscriptionCurrentPeriodStart timestamp [default: `now()`]
+  tenantSubscriptionCurrentPeriodEnd timestamp [note: 'Null for lifetime subscriptions']
+  tenantSubscriptionTrialEndsAt timestamp
+  tenantSubscriptionPaidAt timestamp [note: 'When payment was made']
+  tenantSubscriptionPaymentReference varchar [note: 'Payment gateway reference']
+  tenantSubscriptionPaymentMethod varchar [note: 'bankTransfer | card | paystack | flutterwave']
+  tenantSubscriptionCancelledAt timestamp
+  tenantSubscriptionCancellationReason text
+  tenantSubscriptionCreatedAt timestamp [default: `now()`]
+  tenantSubscriptionUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Links tenant to their subscription plan.
+
+  Payment Types:
+  - recurring: Monthly/yearly auto-renewal
+  - oneTime: Single payment, valid for set period
+  - lifetime: One-time payment, never expires
+
+  Status Flow:
+  - trial → active (after payment)
+  - trial → expired (no payment)
+  - active → pastDue (payment failed)
+  - active → cancelled (user cancelled)
+  - paid → indicates successful one-time payment
+  - lifetime → permanent access, never expires
+  '''
+}
+
+Table User {
+  userId uuid [pk]
+  userTenantId uuid [ref: > Tenant.tenantId, note: 'Null for platform admins']
+  userEmail varchar [not null]
+  userPassword varchar [not null]
+  userFirstName varchar [not null]
+  userLastName varchar [not null]
+  userPhone varchar
+  userAvatarUrl varchar
+  userRole varchar [default: 'viewer', note: 'superAdmin | admin | viewer']
+  userIsOwner boolean [default: false, note: 'First user who created the tenant']
+  userIsActive boolean [default: true]
+  userEmailVerified boolean [default: false]
+  userEmailVerifiedAt timestamp
+  userLastLogin timestamp
+  userPasswordResetToken varchar
+  userPasswordResetExpires timestamp
+  userCreatedAt timestamp [default: `now()`]
+  userUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Users belong to a tenant. Roles:
+  - superAdmin: Full access within tenant
+  - admin: Can manage most features
+  - viewer: Read-only access
+  '''
+}
+
+Table TenantApp {
+  tenantAppId uuid [pk]
+  tenantAppTenantId uuid [ref: > Tenant.tenantId, not null]
+  tenantAppAppId uuid [ref: > App.appId, not null]
+  tenantAppIsEnabled boolean [default: true, note: 'Tenant can enable/disable apps']
+  tenantAppEnabledAt timestamp
+  tenantAppDisabledAt timestamp
+  tenantAppSettings jsonb [note: 'App-specific tenant settings']
+  tenantAppCreatedAt timestamp [default: `now()`]
+  tenantAppUpdatedAt timestamp [default: `now()`]
+
+  indexes {
+    (tenantAppTenantId, tenantAppAppId) [unique]
+  }
+
+  Note: '''
+  Which apps each tenant has enabled.
+  Controls what apps appear on tenant dashboard.
+  Settings can customize app behavior per tenant.
+  '''
+}
+
+Table Role {
+  roleId uuid [pk]
+  roleTenantId uuid [ref: > Tenant.tenantId, not null]
+  roleAppId uuid [ref: > App.appId, note: 'Null = global role across all apps']
+  roleCode varchar [not null, note: 'e.g., admin, manager, viewer, approver']
+  roleName varchar [not null, note: 'e.g., Sales Admin, HR Manager']
+  roleDescription text
+  roleIsSystem boolean [default: false, note: 'System roles cannot be deleted']
+  roleIsActive boolean [default: true]
+  roleCreatedAt timestamp [default: `now()`]
+  roleUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Custom roles per tenant, optionally scoped to an app.
+  Global roles (appId=null): superAdmin, admin, viewer
+  App-specific: Sales Manager, HR Admin, etc.
+  '''
+}
+
+Table RolePermission {
+  rolePermissionId uuid [pk]
+  rolePermissionRoleId uuid [ref: > Role.roleId, not null]
+  rolePermissionPermissionId uuid [ref: > AppPermission.appPermissionId, not null]
+  rolePermissionCreatedAt timestamp [default: `now()`]
+
+  indexes {
+    (rolePermissionRoleId, rolePermissionPermissionId) [unique]
+  }
+
+  Note: '''
+  Maps permissions to roles.
+  e.g., "Sales Manager" role gets: create_invoice, read_customer, etc.
+  '''
+}
+
+Table UserAppAccess {
+  userAppAccessId uuid [pk]
+  userAppAccessUserId uuid [ref: > User.userId, not null]
+  userAppAccessAppId uuid [ref: > App.appId, not null]
+  userAppAccessRoleId uuid [ref: > Role.roleId, not null]
+  userAppAccessGrantedByUserId uuid [ref: > User.userId]
+  userAppAccessGrantedAt timestamp [default: `now()`]
+  userAppAccessExpiresAt timestamp [note: 'Optional expiry for temporary access']
+  userAppAccessIsActive boolean [default: true]
+  userAppAccessCreatedAt timestamp [default: `now()`]
+  userAppAccessUpdatedAt timestamp [default: `now()`]
+
+  indexes {
+    (userAppAccessUserId, userAppAccessAppId) [unique]
+  }
+
+  Note: '''
+  USER + APP + ROLE assignment.
+  Determines what each user can do in each app.
+  e.g., John has "Manager" role in Sales app,
+        but "Viewer" role in HR app.
+  '''
+}
+
+Table AuditLog {
+  auditLogId uuid [pk]
+  auditLogTenantId uuid [ref: > Tenant.tenantId]
+  auditLogUserId uuid [ref: > User.userId]
+  auditLogAppId uuid [ref: > App.appId, note: 'Which app the action was in']
+  auditLogAction varchar [not null, note: 'create | read | update | delete | login | logout | export']
+  auditLogEntityType varchar [not null, note: 'e.g., Customer, Invoice, Employee']
+  auditLogEntityId uuid
+  auditLogOldValues jsonb [note: 'Previous state for updates']
+  auditLogNewValues jsonb [note: 'New state for creates/updates']
+  auditLogIpAddress varchar
+  auditLogUserAgent varchar
+  auditLogCreatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Complete audit trail for compliance.
+  Tracks all CRUD operations and user actions.
+  Now includes which app the action occurred in.
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 1: ACCOUNTING                                       ║
+// ║  General Ledger, Chart of Accounts, Journal Entries                          ║
+// ║  Features: Double-entry bookkeeping, Financial Reports                       ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table ChartOfAccount {
+  chartOfAccountId uuid [pk]
+  chartOfAccountTenantId uuid [ref: > Tenant.tenantId, not null]
+  chartOfAccountCode varchar [not null, note: 'Account code e.g., 1000, 2000']
+  chartOfAccountName varchar [not null, note: 'e.g., Cash, Accounts Receivable']
+  chartOfAccountType varchar [not null, note: 'asset | liability | equity | revenue | expense']
+  chartOfAccountParentChartOfAccountId uuid [ref: > ChartOfAccount.chartOfAccountId, note: 'For hierarchical accounts']
+  chartOfAccountDescription text
+  chartOfAccountIsActive boolean [default: true]
+  chartOfAccountCreatedAt timestamp [default: `now()`]
+  chartOfAccountUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Standard Chart of Accounts for double-entry bookkeeping.
+  Types follow accounting equation: Assets = Liabilities + Equity
+  '''
+}
+
+Table Journal {
+  journalId uuid [pk]
+  journalTenantId uuid [ref: > Tenant.tenantId, not null]
+  journalNumber varchar [not null, note: 'Auto-generated journal number']
+  journalDate date [not null]
+  journalDescription text
+  journalReference varchar [note: 'External reference number']
+  journalStatus varchar [default: 'draft', note: 'draft | posted | reversed']
+  journalTotalDebit decimal [default: 0]
+  journalTotalCredit decimal [default: 0]
+  journalSourceType varchar [note: 'manual | invoice | payment | expense | payroll | asset | depreciation']
+  journalSourceId uuid [note: 'ID of source document']
+  journalCreatedByUserId uuid [ref: > User.userId]
+  journalPostedByUserId uuid [ref: > User.userId]
+  journalPostedAt timestamp
+  journalCreatedAt timestamp [default: `now()`]
+  journalUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Journal entries for double-entry bookkeeping.
+  Can be auto-generated from invoices, payments, payroll, etc.
+  Total Debits must equal Total Credits.
+  '''
+}
+
+Table JournalLine {
+  journalLineId uuid [pk]
+  journalLineJournalId uuid [ref: > Journal.journalId, not null]
+  journalLineChartOfAccountId uuid [ref: > ChartOfAccount.chartOfAccountId, not null]
+  journalLineDescription text
+  journalLineDebit decimal [default: 0]
+  journalLineCredit decimal [default: 0]
+  journalLineCreatedAt timestamp [default: `now()`]
+  journalLineUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Individual debit/credit lines within a journal entry.
+  Each line affects one account.
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 2: SALES                                            ║
+// ║  Customers, Products, Invoices, Payments, Leads                              ║
+// ║  Features: CRM, Quotations, Order Management                                 ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table Customer {
+  customerId uuid [pk]
+  customerTenantId uuid [ref: > Tenant.tenantId, not null]
+  customerCode varchar [note: 'Auto-generated customer code']
+  customerCompanyName varchar [not null]
+  customerContactPerson varchar
+  customerEmail varchar
+  customerPhone varchar
+  customerAlternatePhone varchar
+  customerAddress text
+  customerCity varchar
+  customerState varchar
+  customerCountry varchar [default: 'Nigeria']
+  customerTaxId varchar [note: 'Customer TIN for tax purposes']
+  customerCreditLimit decimal [default: 0]
+  customerPaymentTerms int [default: 30, note: 'Days until payment due']
+  customerNotes text
+  customerIsActive boolean [default: true]
+  customerCreatedAt timestamp [default: `now()`]
+  customerUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Customer master data.
+  Used for invoicing, order management, and CRM.
+  '''
+}
+
+Table SalesLead {
+  salesLeadId uuid [pk]
+  salesLeadTenantId uuid [ref: > Tenant.tenantId, not null]
+  salesLeadCode varchar
+  salesLeadCompanyName varchar [not null]
+  salesLeadContactPerson varchar
+  salesLeadEmail varchar
+  salesLeadPhone varchar
+  salesLeadSource varchar [note: 'website | referral | coldCall | advertisement | tradeShow | socialMedia | other']
+  salesLeadStatus varchar [default: 'new', note: 'new | contacted | qualified | proposal | negotiation | won | lost']
+  salesLeadPriority varchar [default: 'medium', note: 'low | medium | high']
+  salesLeadEstimatedValue decimal
+  salesLeadNotes text
+  salesLeadAddress text
+  salesLeadCity varchar
+  salesLeadState varchar
+  salesLeadCountry varchar [default: 'Nigeria']
+  salesLeadAssignedToUserId uuid [ref: > User.userId]
+  salesLeadConvertedToCustomerId uuid [ref: > Customer.customerId, note: 'When lead becomes customer']
+  salesLeadConvertedAt timestamp
+  salesLeadLastContactDate date
+  salesLeadNextFollowUpDate date
+  salesLeadIsActive boolean [default: true]
+  salesLeadCreatedAt timestamp [default: `now()`]
+  salesLeadUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Sales pipeline management.
+  Leads flow: New → Contacted → Qualified → Proposal → Negotiation → Won/Lost
+  Won leads convert to Customers.
+  '''
+}
+
+Table ProductCategory {
+  productCategoryId uuid [pk]
+  productCategoryTenantId uuid [ref: > Tenant.tenantId, not null]
+  productCategoryName varchar [not null]
+  productCategoryDescription text
+  productCategoryParentProductCategoryId uuid [ref: > ProductCategory.productCategoryId, note: 'Hierarchical categories']
+  productCategoryCreatedAt timestamp [default: `now()`]
+  productCategoryUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Organize products into categories and subcategories.'
+}
+
+Table Product {
+  productId uuid [pk]
+  productTenantId uuid [ref: > Tenant.tenantId, not null]
+  productSku varchar [note: 'Stock Keeping Unit']
+  productName varchar [not null]
+  productDescription text
+  productType varchar [default: 'product', note: 'product | service']
+  productProductCategoryId uuid [ref: > ProductCategory.productCategoryId]
+  productUnitOfMeasure varchar [note: 'e.g., pcs, kg, liters']
+  productCostPrice decimal [default: 0]
+  productSellingPrice decimal [not null]
+  productTaxRate decimal [default: 7.5, note: 'VAT rate in Nigeria']
+  productQuantityOnHand decimal [default: 0]
+  productTrackInventory boolean [default: true]
+  productReorderLevel int
+  productReorderQuantity int
+  productIsActive boolean [default: true]
+  productCreatedAt timestamp [default: `now()`]
+  productUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Products and services catalog.
+  Supports inventory tracking with reorder alerts.
+  '''
+}
+
+Table Invoice {
+  invoiceId uuid [pk]
+  invoiceTenantId uuid [ref: > Tenant.tenantId, not null]
+  invoiceNumber varchar [not null, note: 'Auto-generated invoice number']
+  invoiceType varchar [default: 'invoice', note: 'invoice | quotation | creditNote']
+  invoiceCustomerId uuid [ref: > Customer.customerId, not null]
+  invoiceDate date [not null]
+  invoiceDueDate date [not null]
+  invoiceSubtotal decimal [not null]
+  invoiceVatAmount decimal [default: 0]
+  invoiceWhtAmount decimal [default: 0, note: 'Withholding Tax']
+  invoiceTotalAmount decimal [not null]
+  invoiceAmountPaid decimal [default: 0]
+  invoiceBalanceDue decimal
+  invoiceStatus varchar [default: 'draft', note: 'draft | sent | partial | paid | overdue | cancelled']
+  invoiceNotes text
+  invoiceTerms text [note: 'Payment terms and conditions']
+  invoiceCreatedByUserId uuid [ref: > User.userId]
+  invoiceCreatedAt timestamp [default: `now()`]
+  invoiceUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Customer invoices, quotations, and credit notes.
+  Status flow: Draft → Sent → Partial/Paid/Overdue
+  '''
+}
+
+Table InvoiceLine {
+  invoiceLineId uuid [pk]
+  invoiceLineInvoiceId uuid [ref: > Invoice.invoiceId, not null]
+  invoiceLineProductId uuid [ref: > Product.productId]
+  invoiceLineDescription text
+  invoiceLineQuantity decimal [not null]
+  invoiceLineUnitPrice decimal [not null]
+  invoiceLineTaxRate decimal [default: 7.5]
+  invoiceLineTaxAmount decimal [default: 0]
+  invoiceLineTotal decimal [not null]
+  invoiceLineCreatedAt timestamp [default: `now()`]
+  invoiceLineUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Line items on an invoice. Can reference products or be free-form.'
+}
+
+Table Payment {
+  paymentId uuid [pk]
+  paymentTenantId uuid [ref: > Tenant.tenantId, not null]
+  paymentNumber varchar [not null]
+  paymentInvoiceId uuid [ref: > Invoice.invoiceId, not null]
+  paymentDate date [not null]
+  paymentAmount decimal [not null]
+  paymentMethod varchar [not null, note: 'cash | bankTransfer | cheque | card | mobileMoney']
+  paymentReference varchar [note: 'Transaction reference']
+  paymentBankName varchar
+  paymentNotes text
+  paymentCreatedByUserId uuid [ref: > User.userId]
+  paymentCreatedAt timestamp [default: `now()`]
+  paymentUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Payment receipts linked to invoices.
+  Supports multiple payments per invoice (partial payments).
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 3: HR (Human Resources)                            ║
+// ║  Employees, Departments, Leave Management                                    ║
+// ║  Features: Employee profiles, Organization structure                         ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table Department {
+  departmentId uuid [pk]
+  departmentTenantId uuid [ref: > Tenant.tenantId, not null]
+  departmentName varchar [not null]
+  departmentCode varchar
+  departmentManagerEmployeeId uuid [ref: > Employee.employeeId, note: 'Department manager']
+  departmentParentDepartmentId uuid [ref: > Department.departmentId, note: 'For hierarchical structure']
+  departmentIsActive boolean [default: true]
+  departmentCreatedAt timestamp [default: `now()`]
+  departmentUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Organization structure with nested departments.'
+}
+
+Table Grade {
+  gradeId uuid [pk]
+  gradeTenantId uuid [ref: > Tenant.tenantId, not null]
+  gradeCode varchar [not null, note: 'e.g., G1, G2, G3']
+  gradeName varchar [not null, note: 'e.g., Junior, Senior, Manager']
+  gradeDescription text
+  gradeBaseSalary decimal [not null]
+  gradeIsActive boolean [default: true]
+  gradeCreatedAt timestamp [default: `now()`]
+  gradeUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Salary grades define pay scales and levels.'
+}
+
+Table SalaryComponent {
+  salaryComponentId uuid [pk]
+  salaryComponentTenantId uuid [ref: > Tenant.tenantId, not null]
+  salaryComponentGradeId uuid [ref: > Grade.gradeId, not null]
+  salaryComponentCode varchar [not null]
+  salaryComponentName varchar [not null, note: 'e.g., Housing Allowance, Transport']
+  salaryComponentType varchar [default: 'earning', note: 'earning | deduction']
+  salaryComponentAmount decimal [not null]
+  salaryComponentIsPercentage boolean [default: false]
+  salaryComponentPercentageOf varchar [note: 'Base field if percentage']
+  salaryComponentIsTaxable boolean [default: true]
+  salaryComponentIsActive boolean [default: true]
+  salaryComponentSortOrder int [default: 0]
+  salaryComponentCreatedAt timestamp [default: `now()`]
+  salaryComponentUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Salary structure components by grade.
+  Earnings: Allowances, bonuses
+  Deductions: Tax, pension, loans
+  '''
+}
+
+Table Employee {
+  employeeId uuid [pk]
+  employeeTenantId uuid [ref: > Tenant.tenantId, not null]
+  employeeCode varchar [note: 'Employee ID/Number']
+  employeeUserId uuid [ref: > User.userId, note: 'Link to system user account']
+  employeeFirstName varchar [not null]
+  employeeLastName varchar [not null]
+  employeeMiddleName varchar
+  employeeEmail varchar [not null]
+  employeePhone varchar
+  employeePersonalEmail varchar
+  employeeDateOfBirth date
+  employeeGender varchar [note: 'male | female | other']
+  employeeMaritalStatus varchar [note: 'single | married | divorced | widowed']
+  employeeAddress text
+  employeeCity varchar
+  employeeState varchar
+  employeeCountry varchar [default: 'Nigeria']
+  employeeNationality varchar
+  employeeNin varchar [note: 'National Identification Number']
+  employeeTaxId varchar [note: 'Tax ID for PAYE']
+  employeeBankName varchar
+  employeeBankAccountNumber varchar
+  employeeBankAccountName varchar
+  employeeDepartmentId uuid [ref: > Department.departmentId]
+  employeeJobTitle varchar
+  employeeGradeId uuid [ref: > Grade.gradeId]
+  employeeEmploymentType varchar [default: 'fullTime', note: 'fullTime | partTime | contract | intern']
+  employeeEmploymentStatus varchar [default: 'active', note: 'active | onLeave | suspended | terminated | resigned']
+  employeeHireDate date
+  employeeConfirmationDate date
+  employeeTerminationDate date
+  employeeTerminationReason text
+  employeeReportsToEmployeeId uuid [ref: > Employee.employeeId, note: 'Direct supervisor']
+  employeeSalary decimal [default: 0]
+  employeeCreatedAt timestamp [default: `now()`]
+  employeeUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Complete employee profile.
+  Linked to User for system access.
+  Supports org hierarchy via reportsTo.
+  '''
+}
+
+Table LeaveType {
+  leaveTypeId uuid [pk]
+  leaveTypeTenantId uuid [ref: > Tenant.tenantId, not null]
+  leaveTypeName varchar [not null, note: 'e.g., Annual, Sick, Maternity']
+  leaveTypeDaysAllowed int [not null]
+  leaveTypeIsPaid boolean [default: true]
+  leaveTypeIsActive boolean [default: true]
+  leaveTypeCreatedAt timestamp [default: `now()`]
+  leaveTypeUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Define leave policies with allocated days per year.'
+}
+
+Table LeaveRequest {
+  leaveRequestId uuid [pk]
+  leaveRequestTenantId uuid [ref: > Tenant.tenantId, not null]
+  leaveRequestEmployeeId uuid [ref: > Employee.employeeId, not null]
+  leaveRequestLeaveTypeId uuid [ref: > LeaveType.leaveTypeId, not null]
+  leaveRequestStartDate date [not null]
+  leaveRequestEndDate date [not null]
+  leaveRequestDays int [not null]
+  leaveRequestReason text
+  leaveRequestStatus varchar [default: 'pending', note: 'pending | approved | rejected | cancelled']
+  leaveRequestApprovedByUserId uuid [ref: > User.userId]
+  leaveRequestApprovedAt timestamp
+  leaveRequestRejectionReason text
+  leaveRequestCreatedAt timestamp [default: `now()`]
+  leaveRequestUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Employee leave requests with approval workflow.
+  Flow: Pending → Approved/Rejected
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 3B: PAYROLL                                        ║
+// ║  Salary Processing, Tax Calculations, Bank Payments                          ║
+// ║  Features: Monthly runs, Nigerian tax compliance (PAYE, Pension)             ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table PayrollRun {
+  payrollRunId uuid [pk]
+  payrollRunTenantId uuid [ref: > Tenant.tenantId, not null]
+  payrollRunMonth int [not null, note: '1-12']
+  payrollRunYear int [not null]
+  payrollRunStatus varchar [default: 'draft', note: 'draft | processing | approved | paid | cancelled']
+  payrollRunTotalGrossPay decimal [default: 0]
+  payrollRunTotalDeductions decimal [default: 0]
+  payrollRunTotalNetPay decimal [default: 0]
+  payrollRunEmployeeCount int [default: 0]
+  payrollRunProcessedByUserId uuid [ref: > User.userId]
+  payrollRunProcessedAt timestamp
+  payrollRunApprovedByUserId uuid [ref: > User.userId]
+  payrollRunApprovedAt timestamp
+  payrollRunPaidAt timestamp
+  payrollRunNotes text
+  payrollRunCreatedAt timestamp [default: `now()`]
+  payrollRunUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Monthly payroll batch processing.
+  Flow: Draft → Processing → Approved → Paid
+  '''
+}
+
+Table PayrollRecord {
+  payrollRecordId uuid [pk]
+  payrollRecordPayrollRunId uuid [ref: > PayrollRun.payrollRunId, not null]
+  payrollRecordEmployeeId uuid [ref: > Employee.employeeId, not null]
+  payrollRecordGradeId uuid [ref: > Grade.gradeId]
+  payrollRecordBaseSalary decimal [not null]
+  payrollRecordGrossPay decimal [not null]
+  payrollRecordTotalEarnings decimal [not null]
+  payrollRecordTotalDeductions decimal [not null]
+  payrollRecordNetPay decimal [not null]
+  payrollRecordTaxAmount decimal [default: 0, note: 'PAYE tax']
+  payrollRecordPensionAmount decimal [default: 0, note: 'Employee pension contribution']
+  payrollRecordStatus varchar [default: 'pending', note: 'pending | approved | paid']
+  payrollRecordBankName varchar
+  payrollRecordBankAccountNumber varchar
+  payrollRecordBankAccountName varchar
+  payrollRecordCreatedAt timestamp [default: `now()`]
+  payrollRecordUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Individual employee payroll calculation for a run.'
+}
+
+Table PayrollLine {
+  payrollLineId uuid [pk]
+  payrollLinePayrollRecordId uuid [ref: > PayrollRecord.payrollRecordId, not null]
+  payrollLineSalaryComponentId uuid [ref: > SalaryComponent.salaryComponentId]
+  payrollLineName varchar [not null]
+  payrollLineType varchar [not null, note: 'earning | deduction']
+  payrollLineAmount decimal [not null]
+  payrollLineIsTaxable boolean [default: true]
+  payrollLineCreatedAt timestamp [default: `now()`]
+  payrollLineUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Breakdown of earnings and deductions for each employee.'
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 4: EXPENSE MANAGEMENT                              ║
+// ║  Expense Claims, Budgets, Approvals                                          ║
+// ║  Features: Receipt capture, Budget tracking                                  ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table ExpenseCategory {
+  expenseCategoryId uuid [pk]
+  expenseCategoryTenantId uuid [ref: > Tenant.tenantId, not null]
+  expenseCategoryName varchar [not null, note: 'e.g., Travel, Office Supplies']
+  expenseCategoryDescription text
+  expenseCategoryChartOfAccountId uuid [ref: > ChartOfAccount.chartOfAccountId, note: 'GL account for expense']
+  expenseCategoryIsActive boolean [default: true]
+  expenseCategoryCreatedAt timestamp [default: `now()`]
+  expenseCategoryUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Categorize expenses for reporting and GL mapping.'
+}
+
+Table Expense {
+  expenseId uuid [pk]
+  expenseTenantId uuid [ref: > Tenant.tenantId, not null]
+  expenseNumber varchar [not null]
+  expenseExpenseCategoryId uuid [ref: > ExpenseCategory.expenseCategoryId, not null]
+  expenseDate date [not null]
+  expenseAmount decimal [not null]
+  expenseVatAmount decimal [default: 0]
+  expenseTotalAmount decimal [not null]
+  expenseDescription text
+  expenseVendor varchar
+  expensePaymentMethod varchar [note: 'cash | bankTransfer | cheque | card']
+  expenseReference varchar
+  expenseReceiptUrl varchar [note: 'Uploaded receipt image']
+  expenseStatus varchar [default: 'draft', note: 'draft | pending | approved | rejected | paid']
+  expenseSubmittedByUserId uuid [ref: > User.userId]
+  expenseApprovedByUserId uuid [ref: > User.userId]
+  expenseApprovedAt timestamp
+  expensePaidAt timestamp
+  expenseCreatedAt timestamp [default: `now()`]
+  expenseUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Expense claims with approval workflow.
+  Flow: Draft → Pending → Approved → Paid
+  '''
+}
+
+Table Budget {
+  budgetId uuid [pk]
+  budgetTenantId uuid [ref: > Tenant.tenantId, not null]
+  budgetName varchar [not null]
+  budgetFiscalYear int [not null]
+  budgetDepartmentId uuid [ref: > Department.departmentId]
+  budgetExpenseCategoryId uuid [ref: > ExpenseCategory.expenseCategoryId]
+  budgetAmount decimal [not null, note: 'Budgeted amount']
+  budgetSpent decimal [default: 0, note: 'Amount spent to date']
+  budgetStatus varchar [default: 'draft', note: 'draft | active | closed']
+  budgetCreatedAt timestamp [default: `now()`]
+  budgetUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Budget allocation by department/category for expense control.'
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 5: FIXED ASSETS                                    ║
+// ║  Asset Register, Depreciation, Maintenance                                   ║
+// ║  Features: Depreciation schedules, Asset tracking                            ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table AssetCategory {
+  assetCategoryId uuid [pk]
+  assetCategoryTenantId uuid [ref: > Tenant.tenantId, not null]
+  assetCategoryName varchar [not null, note: 'e.g., Vehicles, Equipment, Furniture']
+  assetCategoryDescription text
+  assetCategoryDepreciationMethod varchar [default: 'straightLine', note: 'straightLine | decliningBalance']
+  assetCategoryUsefulLifeYears int [default: 5]
+  assetCategoryCreatedAt timestamp [default: `now()`]
+  assetCategoryUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Asset categories with depreciation rules.'
+}
+
+Table FixedAsset {
+  fixedAssetId uuid [pk]
+  fixedAssetTenantId uuid [ref: > Tenant.tenantId, not null]
+  fixedAssetCode varchar [not null]
+  fixedAssetName varchar [not null]
+  fixedAssetDescription text
+  fixedAssetAssetCategoryId uuid [ref: > AssetCategory.assetCategoryId]
+  fixedAssetPurchaseDate date [not null]
+  fixedAssetPurchasePrice decimal [not null]
+  fixedAssetCurrentValue decimal [note: 'After depreciation']
+  fixedAssetLocation varchar
+  fixedAssetSerialNumber varchar
+  fixedAssetManufacturer varchar
+  fixedAssetModel varchar
+  fixedAssetWarrantyExpiry date
+  fixedAssetStatus varchar [default: 'active', note: 'active | disposed | underMaintenance | retired']
+  fixedAssetAssignedToEmployeeId uuid [ref: > Employee.employeeId]
+  fixedAssetAssignedAt timestamp
+  fixedAssetCreatedAt timestamp [default: `now()`]
+  fixedAssetUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Fixed asset register.
+  Tracks ownership, location, and depreciation.
+  '''
+}
+
+Table AssetMaintenance {
+  assetMaintenanceId uuid [pk]
+  assetMaintenanceFixedAssetId uuid [ref: > FixedAsset.fixedAssetId, not null]
+  assetMaintenanceType varchar [not null, note: 'preventive | corrective | upgrade']
+  assetMaintenanceDescription text
+  assetMaintenanceDate date [not null]
+  assetMaintenanceCost decimal [default: 0]
+  assetMaintenanceVendorName varchar
+  assetMaintenanceNextDate date [note: 'Next scheduled maintenance']
+  assetMaintenancePerformedBy varchar
+  assetMaintenanceCreatedAt timestamp [default: `now()`]
+  assetMaintenanceUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Asset maintenance history and schedule.'
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 6: INVENTORY                                       ║
+// ║  Stock Adjustments, Inventory Tracking                                       ║
+// ║  Features: Stock levels, Adjustments                                         ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table StockAdjustment {
+  stockAdjustmentId uuid [pk]
+  stockAdjustmentTenantId uuid [ref: > Tenant.tenantId, not null]
+  stockAdjustmentNumber varchar [not null]
+  stockAdjustmentProductId uuid [ref: > Product.productId, not null]
+  stockAdjustmentType varchar [not null, note: 'addition | subtraction | correction']
+  stockAdjustmentQuantity decimal [not null]
+  stockAdjustmentPreviousQuantity decimal [not null]
+  stockAdjustmentNewQuantity decimal [not null]
+  stockAdjustmentReason text
+  stockAdjustmentReference varchar
+  stockAdjustmentDate date [not null]
+  stockAdjustmentCreatedByUserId uuid [ref: > User.userId]
+  stockAdjustmentCreatedAt timestamp [default: `now()`]
+  stockAdjustmentUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Track inventory changes outside of sales/purchases.
+  e.g., Damage, theft, stock count corrections
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 7: TIME & ATTENDANCE                               ║
+// ║  Clock In/Out, Work Schedules, Holidays                                      ║
+// ║  Features: Tymer integration, Overtime tracking                              ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table WorkSchedule {
+  workScheduleId uuid [pk]
+  workScheduleTenantId uuid [ref: > Tenant.tenantId, not null]
+  workScheduleName varchar [not null, note: 'e.g., Standard 9-5, Shift A']
+  workScheduleMondayStart time
+  workScheduleMondayEnd time
+  workScheduleTuesdayStart time
+  workScheduleTuesdayEnd time
+  workScheduleWednesdayStart time
+  workScheduleWednesdayEnd time
+  workScheduleThursdayStart time
+  workScheduleThursdayEnd time
+  workScheduleFridayStart time
+  workScheduleFridayEnd time
+  workScheduleSaturdayStart time
+  workScheduleSaturdayEnd time
+  workScheduleSundayStart time
+  workScheduleSundayEnd time
+  workScheduleIsDefault boolean [default: false]
+  workScheduleCreatedAt timestamp [default: `now()`]
+  workScheduleUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Define work schedules for attendance tracking.'
+}
+
+Table Holiday {
+  holidayId uuid [pk]
+  holidayTenantId uuid [ref: > Tenant.tenantId, not null]
+  holidayName varchar [not null, note: 'e.g., Christmas, Eid']
+  holidayDate date [not null]
+  holidayIsRecurring boolean [default: false]
+  holidayCreatedAt timestamp [default: `now()`]
+  holidayUpdatedAt timestamp [default: `now()`]
+
+  Note: 'Public holidays for attendance calculations.'
+}
+
+Table AttendanceRecord {
+  attendanceRecordId uuid [pk]
+  attendanceRecordTenantId uuid [ref: > Tenant.tenantId, not null]
+  attendanceRecordEmployeeId uuid [ref: > Employee.employeeId, not null]
+  attendanceRecordDate date [not null]
+  attendanceRecordClockInTime timestamp
+  attendanceRecordClockOutTime timestamp
+  attendanceRecordClockInLocation varchar [note: 'GPS coordinates or office name']
+  attendanceRecordClockOutLocation varchar
+  attendanceRecordScheduledStart time
+  attendanceRecordScheduledEnd time
+  attendanceRecordHoursWorked decimal
+  attendanceRecordOvertimeHours decimal
+  attendanceRecordStatus varchar [default: 'present', note: 'present | absent | late | halfDay | holiday | weekend']
+  attendanceRecordLateMinutes int
+  attendanceRecordEarlyDepartureMinutes int
+  attendanceRecordSource varchar [default: 'web', note: 'manual | biometric | mobile | web']
+  attendanceRecordNotes text
+  attendanceRecordCreatedAt timestamp [default: `now()`]
+  attendanceRecordUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Daily attendance records.
+  Integrates with Tymer for automated clock in/out.
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    MODULE 8: PLATFORM BILLING                                ║
+// ║  SaaS billing for tenants (Qorpy's invoices to customers)                    ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+Table PlatformInvoice {
+  platformInvoiceId uuid [pk]
+  platformInvoiceTenantId uuid [ref: > Tenant.tenantId, not null]
+  platformInvoiceNumber varchar [not null]
+  platformInvoiceAmount decimal [not null]
+  platformInvoiceCurrency varchar [default: 'NGN']
+  platformInvoiceStatus varchar [default: 'draft', note: 'draft | sent | paid | overdue | cancelled']
+  platformInvoiceDueDate date [not null]
+  platformInvoicePaidAt timestamp
+  platformInvoicePaymentReference varchar
+  platformInvoiceBillingPeriodStart date
+  platformInvoiceBillingPeriodEnd date
+  platformInvoiceCreatedAt timestamp [default: `now()`]
+  platformInvoiceUpdatedAt timestamp [default: `now()`]
+
+  Note: '''
+  Qorpy's invoices to tenant companies for subscription fees.
+  Generated monthly/yearly based on subscription.
+  '''
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    TABLE GROUPS (for visualization)                          ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+TableGroup platformAdministration {
+  PlatformAdmin
+  SubscriptionPlan
+  PlatformInvoice
+}
+
+TableGroup appRegistry {
+  App
+  AppModule
+  AppPermission
+}
+
+TableGroup multiTenancyCore {
+  Tenant
+  TenantSubscription
+  TenantApp
+  User
+  AuditLog
+}
+
+TableGroup rolesAndPermissions {
+  Role
+  RolePermission
+  UserAppAccess
+}
+
+TableGroup accountingModule {
+  ChartOfAccount
+  Journal
+  JournalLine
+}
+
+TableGroup salesModule {
+  Customer
+  SalesLead
+  ProductCategory
+  Product
+  Invoice
+  InvoiceLine
+  Payment
+}
+
+TableGroup hrModule {
+  Department
+  Grade
+  SalaryComponent
+  Employee
+  LeaveType
+  LeaveRequest
+}
+
+TableGroup payrollModule {
+  PayrollRun
+  PayrollRecord
+  PayrollLine
+}
+
+TableGroup expenseModule {
+  ExpenseCategory
+  Expense
+  Budget
+}
+
+TableGroup fixedAssetsModule {
+  AssetCategory
+  FixedAsset
+  AssetMaintenance
+}
+
+TableGroup inventoryModule {
+  StockAdjustment
+}
+
+TableGroup attendanceModule {
+  WorkSchedule
+  Holiday
+  AttendanceRecord
+}
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    END-TO-END USER FLOW                                       ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+/*
+==================================================================================
+                           END-TO-END USER JOURNEY
+==================================================================================
+
+This section describes the complete flow from a new user signing up to using
+all modules of the Qorpy ERP system.
+
+----------------------------------------------------------------------------------
+PHASE 1: PLATFORM ONBOARDING
+----------------------------------------------------------------------------------
+
+1. USER REGISTRATION
+   └─> User visits qorpy.com landing page
+   └─> Clicks "Start Free Trial" or "Sign Up"
+   └─> Fills registration form:
+       - Company name
+       - Admin email & password
+       - Industry selection
+   └─> System creates:
+       - Tenant record (company)
+       - User record (admin, isOwner=true, role=super_admin)
+       - TenantSubscription (trial status)
+       - Default Roles for tenant (super_admin, admin, viewer)
+       - TenantApp records for plan's included apps
+
+2. COMPANY SETUP (Onboarding Wizard)
+   └─> Step 1: Company Details
+       - Logo upload
+       - Address, phone, email
+       - Tax ID, RC Number
+   └─> Step 2: Select Apps to Enable
+       - Shows apps included in subscription plan
+       - Admin enables: Sales, HR, Accounting (creates TenantApp records)
+       - Each enabled app appears on dashboard
+   └─> Step 3: Invite Team Members
+       - Add additional users
+       - Assign app-specific roles via UserAppAccess:
+         * John: Sales (Manager), HR (Viewer)
+         * Jane: Accounting (Admin), HR (Admin)
+   └─> onboardingCompleted = true
+
+2B. APP & ROLE ARCHITECTURE (How permissions work)
+   └─> App table: Master list of all ERP apps
+       - Sales, HR, Accounting, Production, etc.
+   └─> AppModule: Sub-features within each app
+       - HR → Employees, Payroll, Leave, Attendance
+   └─> AppPermission: Granular actions
+       - hr.employees.create, hr.employees.read, hr.payroll.approve
+   └─> Role: Custom roles per tenant
+       - Can be global (all apps) or app-specific
+       - "HR Manager" role → HR app only
+   └─> RolePermission: Maps permissions to roles
+       - "HR Manager" gets: hr.employees.*, hr.leave.approve
+   └─> UserAppAccess: Assigns users to apps with roles
+       - User John + App HR + Role "HR Manager"
+       - Controls what John sees and can do in HR app
+
+----------------------------------------------------------------------------------
+PHASE 2: SALES MODULE FLOW
+----------------------------------------------------------------------------------
+
+3. CUSTOMER MANAGEMENT
+   └─> Admin opens Sales app from dashboard
+   └─> Navigates to Customers
+   └─> Clicks "Add Customer"
+   └─> Fills customer details:
+       - Company name, contact person
+       - Email, phone, address
+       - Credit limit, payment terms
+   └─> Customer record created
+   └─> Can now create invoices for this customer
+
+4. PRODUCT CATALOG SETUP
+   └─> Navigates to Products > Categories
+   └─> Creates categories: Electronics, Services, etc.
+   └─> Navigates to Products > Product List
+   └─> Adds products:
+       - SKU, name, description
+       - Cost price, selling price
+       - Tax rate (7.5% VAT default)
+       - Enable inventory tracking
+
+5. SALES LEAD PIPELINE
+   └─> Navigates to Leads
+   └─> Adds new lead from website inquiry:
+       - Company name, contact
+       - Source: website
+       - Estimated value
+       - Status: new
+   └─> Sales rep follows up → Status: contacted
+   └─> Lead qualifies → Status: qualified
+   └─> Sends quotation → Status: proposal
+   └─> Negotiation → Status: negotiation
+   └─> WINS deal → Lead converted to Customer
+       - convertedToCustomerId populated
+       - convertedAt timestamp set
+
+6. QUOTATION TO INVOICE FLOW
+   └─> Creates Quotation (Invoice with type=quotation)
+   └─> Adds line items from products
+   └─> Sends to customer (status: sent)
+   └─> Customer accepts
+   └─> Converts quotation to Invoice (type=invoice)
+   └─> Invoice sent (status: sent)
+   └─> Customer pays partial → status: partial
+   └─> Creates Payment record
+   └─> Customer pays remaining → status: paid
+
+7. ACCOUNTING INTEGRATION (Auto-generated)
+   └─> When invoice is posted:
+       - Journal entry auto-created
+       - Debit: Accounts Receivable
+       - Credit: Revenue
+   └─> When payment received:
+       - Journal entry auto-created
+       - Debit: Bank/Cash
+       - Credit: Accounts Receivable
+
+----------------------------------------------------------------------------------
+PHASE 3: HR & PAYROLL MODULE FLOW
+----------------------------------------------------------------------------------
+
+8. ORGANIZATION SETUP
+   └─> Opens HR app
+   └─> Creates Departments:
+       - Finance, Operations, Sales, IT
+       - Sets department managers
+   └─> Creates Grades with salary structures:
+       - Grade 1: Junior (₦100,000 base)
+       - Grade 2: Senior (₦200,000 base)
+       - Grade 3: Manager (₦400,000 base)
+   └─> Creates Salary Components per grade:
+       - Housing Allowance (20% of base)
+       - Transport Allowance (₦30,000 fixed)
+       - PAYE Tax (deduction, calculated)
+       - Pension (deduction, 8% of gross)
+
+9. EMPLOYEE ONBOARDING
+   └─> Navigates to Employees
+   └─> Adds new employee:
+       - Personal info (name, DOB, gender)
+       - Contact (email, phone, address)
+       - Employment (department, grade, job title)
+       - Bank details for salary
+   └─> Links to User account for system access
+   └─> employmentStatus: active
+
+10. LEAVE MANAGEMENT
+    └─> Admin creates Leave Types:
+        - Annual Leave: 20 days, paid
+        - Sick Leave: 10 days, paid
+        - Maternity: 90 days, paid
+    └─> Employee submits LeaveRequest:
+        - Type: Annual Leave
+        - Dates: Jan 15-19 (5 days)
+        - Reason: Family vacation
+        - Status: pending
+    └─> Manager approves → status: approved
+    └─> Deducted from leave balance
+
+11. ATTENDANCE TRACKING (Tymer Integration)
+    └─> Employee clocks in via:
+        - Web interface
+        - Mobile app (GPS captured)
+        - Biometric device
+    └─> System creates AttendanceRecord:
+        - clockInTime recorded
+        - Compares to scheduledStart
+        - Calculates lateMinutes if applicable
+    └─> Employee clocks out
+    └─> hoursWorked & overtimeHours calculated
+
+12. MONTHLY PAYROLL PROCESSING
+    └─> Admin opens Payroll
+    └─> Creates PayrollRun for January 2026
+    └─> System auto-generates PayrollRecords:
+        - Pulls all active employees
+        - Applies grade salary structure
+        - Calculates gross pay
+        - Applies tax (PAYE tables)
+        - Applies pension deductions
+        - Calculates net pay
+    └─> Admin reviews totals
+    └─> Approves payroll run
+    └─> Marks as paid after bank transfer
+    └─> Journal entries auto-generated:
+        - Debit: Salary Expense
+        - Credit: Bank, Tax Payable, Pension Payable
+
+----------------------------------------------------------------------------------
+PHASE 4: EXPENSE & BUDGET FLOW
+----------------------------------------------------------------------------------
+
+13. EXPENSE CLAIM SUBMISSION
+    └─> Employee incurs business expense
+    └─> Opens Expenses module
+    └─> Creates Expense claim:
+        - Category: Travel
+        - Amount: ₦50,000
+        - Description: Client visit transport
+        - Uploads receipt photo
+        - Status: pending
+    └─> Manager reviews and approves
+    └─> Finance processes reimbursement
+    └─> Status: paid
+    └─> Journal entry:
+        - Debit: Travel Expense
+        - Credit: Cash/Bank
+
+14. BUDGET MANAGEMENT
+    └─> Finance creates annual budgets:
+        - Marketing: ₦5,000,000
+        - Travel: ₦2,000,000
+        - Office Supplies: ₦500,000
+    └─> As expenses are approved:
+        - Budget.spent incremented
+        - Alerts when 80% utilized
+    └─> Reports show budget vs actual
+
+----------------------------------------------------------------------------------
+PHASE 5: FIXED ASSETS & DEPRECIATION
+----------------------------------------------------------------------------------
+
+15. ASSET REGISTRATION
+    └─> Opens Fixed Assets app
+    └─> Creates AssetCategory:
+        - Vehicles: 5 years, straight-line
+        - Computers: 3 years, straight-line
+    └─> Registers new asset:
+        - Delivery van purchased
+        - Purchase price: ₦15,000,000
+        - Assigned to: Sales department
+    └─> System schedules depreciation:
+        - Monthly: ₦250,000
+        - Creates journal entries automatically
+
+16. ASSET MAINTENANCE
+    └─> Schedules preventive maintenance:
+        - Vehicle servicing every 3 months
+    └─> Records maintenance performed:
+        - Cost, vendor, next date
+    └─> Tracks full asset lifecycle until disposal
+
+----------------------------------------------------------------------------------
+PHASE 6: ACCOUNTING & REPORTING
+----------------------------------------------------------------------------------
+
+17. CHART OF ACCOUNTS SETUP
+    └─> Finance sets up CoA:
+        - 1000: Assets
+          - 1100: Current Assets
+            - 1110: Cash
+            - 1120: Bank
+            - 1130: Accounts Receivable
+        - 2000: Liabilities
+        - 3000: Equity
+        - 4000: Revenue
+        - 5000: Expenses
+
+18. MANUAL JOURNAL ENTRIES
+    └─> For non-automated transactions:
+        - Creates journal entry
+        - Adds debit/credit lines
+        - Validates total debits = credits
+        - Posts to general ledger
+
+19. FINANCIAL REPORTS
+    └─> Profit & Loss Statement:
+        - Revenue (from invoices)
+        - Less: Expenses (payroll, expenses, depreciation)
+        - = Net Profit/Loss
+    └─> Balance Sheet:
+        - Assets (cash, AR, fixed assets)
+        - Liabilities (AP, tax payable)
+        - Equity (retained earnings)
+
+----------------------------------------------------------------------------------
+PHASE 7: PLATFORM ADMINISTRATION
+----------------------------------------------------------------------------------
+
+20. SUBSCRIPTION MANAGEMENT
+    └─> Trial period ends (14 days)
+    └─> Tenant receives PlatformInvoice
+    └─> Pays via bank transfer
+    └─> Subscription activated
+    └─> status: active, billingCycle: monthly
+
+21. AUDIT & COMPLIANCE
+    └─> All actions logged to AuditLog:
+        - Who did what, when
+        - Previous and new values
+        - IP address, device info
+    └─> Reports available for compliance
+
+==================================================================================
+                           ENTITY RELATIONSHIPS SUMMARY
+==================================================================================
+
+PLATFORM LEVEL (SaaS Infrastructure)
+├── PlatformAdmin (manages entire platform)
+├── SubscriptionPlan (pricing tiers)
+├── App (available ERP applications)
+│   ├── AppModule (sub-features per app)
+│   └── AppPermission (granular actions)
+└── PlatformInvoice (billing to tenants)
+
+TENANT (Company) - All data isolated by tenantId
+├── TenantSubscription → SubscriptionPlan
+├── TenantApp → App (which apps tenant has enabled)
+├── Users (employees with system access)
+│   └── UserAppAccess → App + Role (per-app permissions)
+├── Role (custom roles, can be global or app-specific)
+│   └── RolePermission → AppPermission
+├── AuditLogs (all activity, now includes appId)
+│
+├── [SALES APP]
+│   ├── Customers (B2B clients)
+│   ├── SalesLeads → Customers (when converted)
+│   ├── ProductCategories (hierarchical)
+│   ├── Products → ProductCategory
+│   ├── Invoices → Customer
+│   │   └── InvoiceLines → Product
+│   └── Payments → Invoice
+│
+├── [ACCOUNTING APP]
+│   ├── ChartOfAccounts (hierarchical)
+│   └── Journals
+│       └── JournalLines → ChartOfAccount
+│
+├── [HR APP]
+│   ├── Departments (hierarchical)
+│   ├── Grades
+│   │   └── SalaryComponents
+│   ├── Employees → Department, Grade, User
+│   ├── LeaveTypes
+│   └── LeaveRequests → Employee, LeaveType
+│
+├── [PAYROLL APP]
+│   └── PayrollRuns
+│       └── PayrollRecords → Employee
+│           └── PayrollLines → SalaryComponent
+│
+├── [EXPENSE APP]
+│   ├── ExpenseCategories → ChartOfAccount
+│   ├── Expenses → ExpenseCategory
+│   └── Budgets → Department, ExpenseCategory
+│
+├── [FIXED ASSETS APP]
+│   ├── AssetCategories
+│   ├── FixedAssets → AssetCategory, Employee
+│   └── AssetMaintenances → FixedAsset
+│
+├── [INVENTORY APP]
+│   └── StockAdjustments → Product
+│
+└── [ATTENDANCE APP]
+    ├── WorkSchedules
+    ├── Holidays
+    └── AttendanceRecords → Employee
+
+==================================================================================
+                           KEY BUSINESS RULES
+==================================================================================
+
+1. MULTI-TENANCY: All data is isolated by tenantId
+2. APP-BASED ACCESS: Users only see apps they have access to via UserAppAccess
+3. ROLE-BASED PERMISSIONS: Granular CRUD + custom actions per app/module
+4. DOUBLE-ENTRY: Every financial transaction has balanced journal entries
+5. WORKFLOW: Most records have status fields with defined transitions
+6. AUDIT: All changes logged with user, app, and action details
+7. NIGERIAN COMPLIANCE:
+   - VAT: 7.5% default
+   - PAYE: Progressive tax tables
+   - Pension: 8% employee, 10% employer
+   - WHT: Withholding tax on applicable payments
+
+==================================================================================
+                           PERMISSION CHECK FLOW
+==================================================================================
+
+When user tries to perform an action (e.g., "Create Invoice"):
+
+1. Check: Does user's tenant have Sales app enabled?
+   └─> Query: TenantApp WHERE tenantId = user.tenantId AND appId = 'sales'
+
+2. Check: Does user have access to Sales app?
+   └─> Query: UserAppAccess WHERE userId = user.id AND appId = 'sales'
+
+3. Check: Does user's role have "create_invoice" permission?
+   └─> Query: RolePermission WHERE roleId = userAppAccess.roleId
+              AND permissionId = 'sales.invoices.create'
+
+4. If all checks pass → Allow action
+   If any check fails → Deny with appropriate error
+
+==================================================================================
+*/
