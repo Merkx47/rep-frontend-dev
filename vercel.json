@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "buildCommand": "cd erp-frontend && npm install && npx vite build --config vite.config.ts",
+  "outputDirectory": "erp-frontend/dist/public",
+  "framework": null,
+  "installCommand": "cd erp-frontend && npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
