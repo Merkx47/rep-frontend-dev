@@ -9,10 +9,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import { getModuleColor } from "@/contexts/module-context";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { useTablePagination } from "@/hooks/use-table-pagination";
 import {
   Plus,
   Search,
@@ -104,15 +106,28 @@ export default function EmployeesPage() {
   };
 
   // Filter employees
-  const filteredEmployees = mockEmployees.filter((employee) => {
-    const matchesSearch =
-      `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.employeeId.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
-    const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
-    return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  const filteredEmployees = useMemo(() => {
+    return mockEmployees.filter((employee) => {
+      const matchesSearch =
+        `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        employee.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        employee.employeeId.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
+      const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
+      return matchesSearch && matchesDepartment && matchesStatus;
+    });
+  }, [searchQuery, selectedDepartment, selectedStatus]);
+
+  // Pagination
+  const {
+    paginatedData: paginatedEmployees,
+    currentPage,
+    pageSize,
+    totalPages,
+    totalItems,
+    setCurrentPage,
+    setPageSize,
+  } = useTablePagination({ data: filteredEmployees, initialPageSize: 5 });
 
   // Stats
   const totalEmployees = mockEmployees.length;
@@ -378,14 +393,14 @@ export default function EmployeesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredEmployees.length === 0 ? (
+                {paginatedEmployees.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       No employees found matching your criteria.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredEmployees.map((employee) => (
+                  paginatedEmployees.map((employee) => (
                     <TableRow key={employee.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell>
                         <Link href={`/hr/employee/${employee.id}`}>
@@ -446,6 +461,14 @@ export default function EmployeesPage() {
                 )}
               </TableBody>
             </Table>
+            <DataTablePagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={setPageSize}
+            />
           </CardContent>
         </Card>
       </div>

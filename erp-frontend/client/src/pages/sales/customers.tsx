@@ -21,9 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getModuleColor } from "@/contexts/module-context";
 import { useToast } from "@/hooks/use-toast";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { useTablePagination } from "@/hooks/use-table-pagination";
 
 interface Customer {
   id: string;
@@ -154,6 +156,8 @@ export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { toast } = useToast();
 
   // New customer form state
@@ -207,12 +211,28 @@ export default function CustomersPage() {
     });
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCustomers = useMemo(() => {
+    return customers.filter(customer => {
+      const matchesSearch = customer.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        customer.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        customer.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesType = selectedType === "all" || customer.type === selectedType;
+      const matchesStatus = selectedStatus === "all" || customer.status === selectedStatus;
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  }, [customers, searchQuery, selectedType, selectedStatus]);
+
+  // Pagination
+  const {
+    paginatedData: paginatedCustomers,
+    currentPage,
+    pageSize,
+    totalPages,
+    totalItems,
+    setCurrentPage,
+    setPageSize,
+  } = useTablePagination({ data: filteredCustomers, initialPageSize: 5 });
 
   // Stats
   const totalCustomersCount = customers.length;
@@ -285,16 +305,39 @@ export default function CustomersPage() {
         </div>
 
         {/* Search and Actions */}
-        <div className="flex justify-between items-center">
-          <div className="relative w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search customers..."
-              className="pl-9 rounded-xl border-border/60"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+        <div className="flex flex-col sm:flex-row gap-4 justify-between">
+          <div className="flex gap-2 flex-1 flex-wrap">
+            <div className="relative flex-1 min-w-[200px] max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search customers..."
+                className="pl-9 rounded-xl border-border/60"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Select value={selectedType} onValueChange={setSelectedType}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="enterprise">Enterprise</SelectItem>
+                <SelectItem value="business">Business</SelectItem>
+                <SelectItem value="startup">Startup</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <Dialog open={isAddCustomerOpen} onOpenChange={setIsAddCustomerOpen}>
             <DialogTrigger asChild>
@@ -409,14 +452,14 @@ export default function CustomersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCustomers.length === 0 ? (
+                {paginatedCustomers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       No customers found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredCustomers.map(customer => (
+                  paginatedCustomers.map(customer => (
                     <TableRow key={customer.id}>
                       <TableCell>
                         <div>
@@ -436,6 +479,14 @@ export default function CustomersPage() {
                 )}
               </TableBody>
             </Table>
+            <DataTablePagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={setPageSize}
+            />
           </CardContent>
         </Card>
       </div>

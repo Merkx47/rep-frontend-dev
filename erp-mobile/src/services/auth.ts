@@ -57,7 +57,46 @@ class AuthService {
    * Login with email and password
    */
   async login(credentials: LoginCredentials): Promise<{ user: User; tokens: AuthTokens }> {
-    // TODO: Replace with actual API call
+    // Development mode: Accept any valid email/password for testing (same as web)
+    if (__DEV__ || !process.env.EXPO_PUBLIC_API_URL) {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Mock successful login - matches web mock data
+      const mockUser: User = {
+        id: '1',
+        email: credentials.email,
+        firstName: credentials.email.split('@')[0] || 'Demo',
+        lastName: 'User',
+        role: 'admin',
+        isActive: true,
+        profileImage: undefined,
+        phone: undefined,
+        lastLogin: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        appAccess: [
+          { appId: 'hr', appName: 'HR', role: 'Admin' },
+          { appId: 'sales', appName: 'Sales', role: 'Manager' },
+          { appId: 'accounting', appName: 'Accounting', role: 'Viewer' },
+          { appId: 'inventory', appName: 'Inventory', role: 'Admin' },
+        ],
+      };
+
+      const mockTokens: AuthTokens = {
+        accessToken: 'mock_access_token_' + Date.now(),
+        refreshToken: 'mock_refresh_token_' + Date.now(),
+        expiresIn: 3600,
+        tokenType: 'Bearer',
+      };
+
+      await this.storeTokens(mockTokens);
+      await this.storeUser(mockUser);
+
+      return { user: mockUser, tokens: mockTokens };
+    }
+
+    // Production: Call actual API
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
       method: 'POST',
       headers: {

@@ -1,7 +1,7 @@
 import { SidebarLayout } from "@/components/layout-sidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Filter, MoreHorizontal } from "lucide-react";
+import { Plus, Search, MoreHorizontal } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -27,9 +27,11 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { getModuleColor } from "@/contexts/module-context";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { useTablePagination } from "@/hooks/use-table-pagination";
 
 // Mock data for chart of accounts
 const mockAccounts = [
@@ -73,6 +75,8 @@ const getTypeColor = (type: string) => {
 export default function ChartOfAccountsPage() {
   const moduleColor = getModuleColor("accounting");
   const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedType, setSelectedType] = useState<string>("all");
   const { toast } = useToast();
 
   const handleAddAccount = () => {
@@ -82,6 +86,28 @@ export default function ChartOfAccountsPage() {
     });
     setIsAddAccountOpen(false);
   };
+
+  // Filter accounts
+  const filteredAccounts = useMemo(() => {
+    return mockAccounts.filter((account) => {
+      const matchesSearch =
+        account.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        account.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesType = selectedType === "all" || account.type === selectedType;
+      return matchesSearch && matchesType;
+    });
+  }, [searchQuery, selectedType]);
+
+  // Pagination
+  const {
+    paginatedData: paginatedAccounts,
+    currentPage,
+    pageSize,
+    totalPages,
+    totalItems,
+    setCurrentPage,
+    setPageSize,
+  } = useTablePagination({ data: filteredAccounts, initialPageSize: 10 });
 
   return (
     <SidebarLayout moduleId="accounting">
@@ -232,11 +258,26 @@ export default function ChartOfAccountsPage() {
               <div className="flex gap-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search accounts..." className="pl-9 w-64" />
+                  <Input
+                    placeholder="Search accounts..."
+                    className="pl-9 w-64"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
                 </div>
-                <Button variant="outline" size="icon">
-                  <Filter className="h-4 w-4" />
-                </Button>
+                <Select value={selectedType} onValueChange={setSelectedType}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="asset">Asset</SelectItem>
+                    <SelectItem value="liability">Liability</SelectItem>
+                    <SelectItem value="equity">Equity</SelectItem>
+                    <SelectItem value="revenue">Revenue</SelectItem>
+                    <SelectItem value="expense">Expense</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardHeader>
@@ -254,45 +295,61 @@ export default function ChartOfAccountsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockAccounts.map((account) => (
-                  <TableRow key={account.id} className="hover:bg-muted/50">
-                    <TableCell className="font-mono text-sm">{account.code}</TableCell>
-                    <TableCell className="font-medium">{account.name}</TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className={getTypeColor(account.type)}>
-                        {account.type.charAt(0).toUpperCase() + account.type.slice(1)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {account.parent || "-"}
-                    </TableCell>
-                    <TableCell className="text-right font-mono">
-                      ${account.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
-                        Active
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>Edit Account</DropdownMenuItem>
-                          <DropdownMenuItem>View Transactions</DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">Deactivate</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                {paginatedAccounts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      No accounts found matching your criteria.
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  paginatedAccounts.map((account) => (
+                    <TableRow key={account.id} className="hover:bg-muted/50">
+                      <TableCell className="font-mono text-sm">{account.code}</TableCell>
+                      <TableCell className="font-medium">{account.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className={getTypeColor(account.type)}>
+                          {account.type.charAt(0).toUpperCase() + account.type.slice(1)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {account.parent || "-"}
+                      </TableCell>
+                      <TableCell className="text-right font-mono">
+                        ${account.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                          Active
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Edit Account</DropdownMenuItem>
+                            <DropdownMenuItem>View Transactions</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">Deactivate</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
+            <DataTablePagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={setPageSize}
+            />
           </CardContent>
         </Card>
       </div>

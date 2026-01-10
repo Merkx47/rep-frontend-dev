@@ -1,10 +1,9 @@
 /**
  * Navigation Types
- * Type definitions for React Navigation
+ * Type definitions for React Navigation - Stack-based to match web app
  */
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 
 // Auth Stack
@@ -15,69 +14,109 @@ export type AuthStackParamList = {
   ResetPassword: { token: string };
 };
 
-// Main Tab Navigator
-export type MainTabParamList = {
-  DashboardTab: undefined;
-  ModulesTab: undefined;
-  NotificationsTab: undefined;
-  ProfileTab: undefined;
-};
-
-// Dashboard Stack (nested in DashboardTab)
-export type DashboardStackParamList = {
+// Main Stack Navigator (replaces tabs - matches web structure)
+export type MainStackParamList = {
+  // Dashboard
   Dashboard: undefined;
-  QuickActions: undefined;
-};
 
-// Modules Stack (nested in ModulesTab)
-export type ModulesStackParamList = {
-  ModulesList: undefined;
-  // HR
-  HRHome: undefined;
-  Employees: undefined;
-  EmployeeDetail: { employeeId: string };
-  Payroll: undefined;
-  Leave: undefined;
-  Attendance: undefined;
-  // Sales
-  SalesHome: undefined;
-  Orders: undefined;
-  OrderDetail: { orderId: string };
-  Customers: undefined;
-  CustomerDetail: { customerId: string };
-  Quotations: undefined;
-  // Accounting
-  AccountingHome: undefined;
-  Accounts: undefined;
-  Journals: undefined;
-  Reports: undefined;
-  // Inventory
-  InventoryHome: undefined;
-  Products: undefined;
-  ProductDetail: { productId: string };
-  Stock: undefined;
-  // Admin
-  AdminHome: undefined;
+  // Sales Module
+  Sales: undefined;
+  SalesCustomers: undefined;
+  SalesCustomerDetail: { customerId: string };
+  SalesLeads: undefined;
+  SalesLeadDetail: { leadId: string };
+  SalesQuotations: undefined;
+  SalesQuotationDetail: { quotationId: string };
+  SalesOrders: undefined;
+  SalesOrderDetail: { orderId: string };
+
+  // Accounting Module
+  Accounting: undefined;
+  AccountingChartOfAccounts: undefined;
+  AccountingAccountDetail: { accountId: string };
+  AccountingJournals: undefined;
+  AccountingJournalDetail: { journalId: string };
+  AccountingReports: undefined;
+  AccountingSettings: undefined;
+
+  // HR Module
+  HR: undefined;
+  HREmployees: undefined;
+  HREmployeeDetail: { employeeId: string };
+  HRPayroll: undefined;
+  HRPayrollDetail: { payrollId: string };
+  HRLeave: undefined;
+  HRAttendance: undefined;
+  HRDepartments: undefined;
+  HRSettings: undefined;
+
+  // Production Module
+  Production: undefined;
+  ProductionOrders: undefined;
+  ProductionOrderDetail: { orderId: string };
+  ProductionBOM: undefined;
+  ProductionBOMDetail: { bomId: string };
+  ProductionQuality: undefined;
+  ProductionSettings: undefined;
+
+  // Invoice Module
+  Invoice: undefined;
+  InvoiceList: undefined;
+  InvoiceDetail: { invoiceId: string };
+  InvoiceCreate: undefined;
+  InvoiceSettings: undefined;
+
+  // Bank Module
+  Bank: undefined;
+  BankAccounts: undefined;
+  BankAccountDetail: { accountId: string };
+  BankTransactions: undefined;
+  BankReconciliation: undefined;
+  BankSettings: undefined;
+
+  // Fixed Assets Module
+  FixedAssets: undefined;
+  FixedAssetsList: undefined;
+  FixedAssetDetail: { assetId: string };
+  FixedAssetsDepreciation: undefined;
+  FixedAssetsCategories: undefined;
+  FixedAssetsSettings: undefined;
+
+  // Corporate Cards Module
+  CorporateCards: undefined;
+  CorporateCardsList: undefined;
+  CorporateCardDetail: { cardId: string };
+  CorporateCardsExpenses: undefined;
+  CorporateCardsLimits: undefined;
+  CorporateCardsSettings: undefined;
+
+  // NRS E-Invoice Module
+  NRSEInvoice: undefined;
+  NRSEInvoiceList: undefined;
+  NRSEInvoiceDetail: { invoiceId: string };
+  NRSEInvoiceSubmit: undefined;
+  NRSEInvoiceSettings: undefined;
+
+  // Admin Screens (from dashboard sidebar)
   UserManagement: undefined;
   UserDetail: { userId: string };
+  UserCreate: undefined;
+  UserEdit: { userId: string };
   AppManagement: undefined;
   AppDetail: { appId: string };
   RoleManagement: { appId: string };
-};
 
-// Profile Stack (nested in ProfileTab)
-export type ProfileStackParamList = {
+  // Profile & Settings
   Profile: undefined;
   EditProfile: undefined;
   Settings: undefined;
   Security: undefined;
-  About: undefined;
 };
 
 // Root Navigator (combines Auth and Main)
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
-  Main: NavigatorScreenParams<MainTabParamList>;
+  Main: NavigatorScreenParams<MainStackParamList>;
   // Modal screens accessible from anywhere
   Scanner: undefined;
   Search: undefined;
@@ -93,28 +132,10 @@ export type AuthStackScreenProps<T extends keyof AuthStackParamList> =
     RootStackScreenProps<keyof RootStackParamList>
   >;
 
-export type MainTabScreenProps<T extends keyof MainTabParamList> =
+export type MainStackScreenProps<T extends keyof MainStackParamList> =
   CompositeScreenProps<
-    BottomTabScreenProps<MainTabParamList, T>,
+    NativeStackScreenProps<MainStackParamList, T>,
     RootStackScreenProps<keyof RootStackParamList>
-  >;
-
-export type DashboardStackScreenProps<T extends keyof DashboardStackParamList> =
-  CompositeScreenProps<
-    NativeStackScreenProps<DashboardStackParamList, T>,
-    MainTabScreenProps<'DashboardTab'>
-  >;
-
-export type ModulesStackScreenProps<T extends keyof ModulesStackParamList> =
-  CompositeScreenProps<
-    NativeStackScreenProps<ModulesStackParamList, T>,
-    MainTabScreenProps<'ModulesTab'>
-  >;
-
-export type ProfileStackScreenProps<T extends keyof ProfileStackParamList> =
-  CompositeScreenProps<
-    NativeStackScreenProps<ProfileStackParamList, T>,
-    MainTabScreenProps<'ProfileTab'>
   >;
 
 // Declare global types for useNavigation hook

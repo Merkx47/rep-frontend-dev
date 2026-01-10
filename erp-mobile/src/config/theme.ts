@@ -103,6 +103,12 @@ export const darkColors = {
     900: '#F9FAFB',
   },
 
+  // Semantic Colors (same as light mode)
+  success: colors.success,
+  warning: colors.warning,
+  error: colors.error,
+  info: colors.info,
+
   // Background
   background: {
     primary: '#191C1F',
