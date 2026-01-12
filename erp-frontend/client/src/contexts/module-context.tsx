@@ -13,6 +13,7 @@ export const moduleColors: Record<string, string> = {
   invoice: "#3F51B5",         // Indigo
   bank: "#00BCD4",            // Cyan
   "fixed-assets": "#009688",  // Teal
+  "tenant-admin": "#6366F1",  // Indigo (admin)
 };
 
 // Helper function to get module color by ID

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/components/theme-provider";
 import { QorpyBot } from "@/components/qorpy-bot";
-import { Home, LogOut, Sun, Moon, ChevronRight, Menu, X, Users, LayoutGrid, Shield } from "lucide-react";
+import { LogOut, Sun, Moon, ChevronRight, Menu, X, Settings } from "lucide-react";
 import { useState } from "react";
 import {
   AccountingIcon,
@@ -218,7 +218,7 @@ export default function Dashboard() {
             fixed inset-y-0 left-0 z-30 w-64 bg-card border-r border-border
             transform transition-transform duration-200 ease-in-out
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-            top-16 h-[calc(100vh-4rem)] overflow-y-auto
+            top-16 h-[calc(100vh-4rem)] overflow-hidden
           `}
         >
           <div className="p-4">
@@ -260,20 +260,14 @@ export default function Dashboard() {
               <nav className="space-y-1">
                 <Link href="/admin/users">
                   <button
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                     onClick={() => setSidebarOpen(false)}
                   >
-                    <Users className="w-4 h-4" />
-                    User Management
-                  </button>
-                </Link>
-                <Link href="/admin/apps">
-                  <button
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <LayoutGrid className="w-4 h-4" />
-                    App Management
+                    <span className="flex items-center gap-3">
+                      <Settings className="w-4 h-4" />
+                      Account Management
+                    </span>
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </Link>
               </nav>

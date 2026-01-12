@@ -6,63 +6,77 @@ import {
   X,
   Sun,
   Moon,
-  Grid3X3,
+  Building2,
   Users,
   LayoutGrid,
   Settings,
   CreditCard,
-  Receipt,
   HeadphonesIcon,
+  LayoutDashboard,
+  FolderTree,
+  Shield,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import qorpyLogo from "@assets/qorpy-logo.png";
 
-const ADMIN_COLOR = "#6366F1";
+const PLATFORM_COLOR = "#6366F1";
 
 const navigationItems = [
   {
-    name: "User Management",
-    href: "/admin/users",
-    icon: Users,
+    name: "Dashboard",
+    href: "/platform/dashboard",
+    icon: LayoutDashboard,
   },
   {
-    name: "App Management",
-    href: "/admin/apps",
-    icon: LayoutGrid,
+    name: "Tenants",
+    href: "/platform/tenants",
+    icon: Building2,
   },
   {
-    name: "Billing",
-    href: "/admin/billing",
+    name: "Subscriptions",
+    href: "/platform/subscriptions",
     icon: CreditCard,
   },
   {
-    name: "Subscription",
-    href: "/admin/subscription",
-    icon: Receipt,
+    name: "Categories",
+    href: "/platform/categories",
+    icon: FolderTree,
+  },
+  {
+    name: "Apps",
+    href: "/platform/apps",
+    icon: LayoutGrid,
+  },
+  {
+    name: "Team",
+    href: "/platform/team",
+    icon: Users,
   },
   {
     name: "Support",
-    href: "/admin/support",
+    href: "/platform/support",
     icon: HeadphonesIcon,
   },
   {
     name: "Settings",
-    href: "/admin/settings",
+    href: "/platform/settings",
     icon: Settings,
   },
 ];
 
-interface AdminLayoutProps {
+interface PlatformLayoutProps {
   children: React.ReactNode;
 }
 
-export function AdminLayout({ children }: AdminLayoutProps) {
+export function PlatformLayout({ children }: PlatformLayoutProps) {
   const [location] = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, tenant, logoutMutation } = useAuth();
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // Get admin user from localStorage
+  const adminAuth = typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("adminAuth") || "{}")
+    : {};
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
@@ -84,7 +98,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   const handleLogout = () => {
-    logoutMutation.mutate();
+    localStorage.removeItem("adminAuth");
+    window.location.href = "/platform/login";
   };
 
   return (
@@ -105,36 +120,18 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         )}
       >
         <div className="h-full flex flex-col">
-          {/* Header with Back to Dashboard */}
-          <div className="h-16 flex items-center px-4 border-b border-border gap-2">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="icon" className="h-9 w-9" title="Back to Dashboard">
-                <Grid3X3 className="w-5 h-5" />
-              </Button>
-            </Link>
-            <span className="text-sm text-muted-foreground">Back to Apps</span>
+          {/* Header */}
+          <div className="h-16 flex items-center px-4 border-b border-border gap-3">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-semibold">Platform Admin</span>
             <button
               className="ml-auto lg:hidden text-muted-foreground"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="w-5 h-5" />
             </button>
-          </div>
-
-          {/* Administration Header */}
-          <div className="p-4 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: `${ADMIN_COLOR}20` }}
-              >
-                <Settings className="w-6 h-6" style={{ color: ADMIN_COLOR }} />
-              </div>
-              <div>
-                <p className="font-semibold text-sm">Administration</p>
-                <p className="text-xs text-muted-foreground">{tenant?.name}</p>
-              </div>
-            </div>
           </div>
 
           {/* Navigation */}
@@ -151,7 +148,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                         ? "text-white"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
-                    style={isActive ? { backgroundColor: ADMIN_COLOR } : undefined}
+                    style={isActive ? { backgroundColor: PLATFORM_COLOR } : undefined}
                     onClick={() => setSidebarOpen(false)}
                   >
                     <ItemIcon
@@ -169,17 +166,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <div className="p-4 border-t border-border">
             <div className="flex items-center gap-3 mb-3">
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center font-medium text-sm"
-                style={{ backgroundColor: `${ADMIN_COLOR}20`, color: ADMIN_COLOR }}
+                className="w-9 h-9 rounded-full flex items-center justify-center font-medium text-sm bg-gradient-to-br from-indigo-500 to-purple-600 text-white"
               >
-                {user?.firstName?.charAt(0) || "U"}
-                {user?.lastName?.charAt(0) || ""}
+                {adminAuth.name?.charAt(0) || "A"}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
-                  {user?.firstName} {user?.lastName}
+                  {adminAuth.name || "Platform Admin"}
                 </p>
-                <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                <p className="text-xs text-muted-foreground truncate">{adminAuth.email || "admin@qorpy.com"}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -220,7 +215,12 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           >
             <Menu className="w-5 h-5" />
           </Button>
-          <img src={qorpyLogo} alt="Qorpy" className="h-8" />
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-semibold text-sm">Platform Admin</span>
+          </div>
           <div className="w-9" /> {/* Spacer for centering */}
         </header>
 

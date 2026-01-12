@@ -215,6 +215,40 @@ export const FixedAssetsIcon: React.FC<IconProps> = ({ className, size = 48 }) =
   </svg>
 );
 
+// Tenant Admin Icon - Shield with gear
+export const TenantAdminIcon = ({ size = 48, className = "" }: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Shield */}
+    <path
+      d="M24 4L8 10V22C8 33 15 40 24 44C33 40 40 33 40 22V10L24 4Z"
+      stroke="#6366F1"
+      strokeWidth="2.5"
+      fill="#EEF2FF"
+    />
+    {/* Gear inside shield */}
+    <circle cx="24" cy="22" r="5" stroke="#6366F1" strokeWidth="2" fill="none"/>
+    <path d="M24 14V16" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M24 28V30" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M16 22H18" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M30 22H32" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M18.3 16.3L19.7 17.7" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M28.3 26.3L29.7 27.7" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M18.3 27.7L19.7 26.3" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M28.3 17.7L29.7 16.3" stroke="#6366F1" strokeWidth="2" strokeLinecap="round"/>
+    {/* User silhouettes */}
+    <circle cx="16" cy="36" r="2" fill="#6366F1"/>
+    <circle cx="24" cy="36" r="2" fill="#6366F1"/>
+    <circle cx="32" cy="36" r="2" fill="#6366F1"/>
+  </svg>
+);
+
 // Map of module IDs to icons
 export const ModuleIcons: Record<string, React.FC<IconProps>> = {
   accounting: AccountingIcon,
@@ -228,6 +262,7 @@ export const ModuleIcons: Record<string, React.FC<IconProps>> = {
   invoice: InvoiceIcon,
   bank: BankIcon,
   "fixed-assets": FixedAssetsIcon,
+  "tenant-admin": TenantAdminIcon,
 };
 
 // Get icon by module ID

@@ -16,7 +16,7 @@ import ExpensesPage from "@/pages/expenses";
 import AssetsPage from "@/pages/assets";
 import InventoryPage from "@/pages/inventory";
 import AttendancePage from "@/pages/attendance";
-import SettingsPage from "@/pages/settings";
+// SettingsPage import removed - now using AdminSettingsPage from /admin/settings
 import LandingPage from "@/pages/landing";
 import AboutPage from "@/pages/about";
 import ContactPage from "@/pages/contact";
@@ -27,7 +27,7 @@ import DemoPage from "@/pages/demo";
 import ForgotPasswordPage from "@/pages/forgot-password";
 import ResetPasswordPage from "@/pages/reset-password";
 import EmployeeDetailPage from "@/pages/employee-detail";
-import AdminPortalPage from "@/pages/admin";
+// AdminPortalPage removed - redirects to /platform-admin/login
 import EInvoicePage from "@/pages/e-invoice";
 import NRSEInvoicePage from "@/pages/nrs-einvoice";
 import ProductionPage from "@/pages/production";
@@ -113,12 +113,29 @@ import DisposalPage from "@/pages/fixed-assets/disposal";
 // import FixedAssetsUsersPage from "@/pages/fixed-assets/users"; // Moved to centralized admin
 import FixedAssetsSettingsPage from "@/pages/fixed-assets/settings";
 
-// Admin pages (centralized user & app management)
+// Admin pages (centralized user & app management for tenant super admins)
 import AdminUsersPage from "@/pages/admin/users";
-import AddUserPage from "@/pages/admin/users/add";
+import AdminAddUserPage from "@/pages/admin/users/add";
 import AdminAppsPage from "@/pages/admin/apps/index";
-import AppDetailPage from "@/pages/admin/apps/[id]";
-import AddRolePage from "@/pages/admin/apps/[id]/roles/add";
+import AdminAppDetailPage from "@/pages/admin/apps/[id]";
+import AdminAddRolePage from "@/pages/admin/apps/[id]/roles/add";
+
+// Platform Portal pages (for Qorpy platform owners)
+import PlatformLoginPage from "@/pages/platform/login";
+import PlatformDashboardPage from "@/pages/platform/dashboard";
+import PlatformTenantsPage from "@/pages/platform/tenants";
+import PlatformSubscriptionsPage from "@/pages/platform/subscriptions";
+import PlatformCategoriesPage from "@/pages/platform/categories";
+import PlatformAppsPage from "@/pages/platform/platform-apps";
+import PlatformTeamPage from "@/pages/platform/team";
+import PlatformSupportPage from "@/pages/platform/support";
+import PlatformSettingsPage from "@/pages/platform/settings";
+
+// Admin pages - billing, subscription, support, settings (consolidated under /admin)
+import AdminBillingPage from "@/pages/admin/billing";
+import AdminSubscriptionPage from "@/pages/admin/subscription";
+import AdminSupportPage from "@/pages/admin/support";
+import AdminSettingsPage from "@/pages/admin/settings";
 
 // Protected Route Wrapper
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -391,24 +408,24 @@ function Router() {
         <ProtectedRoute component={FixedAssetsSettingsPage} />
       </Route>
 
-      {/* Admin Routes - Centralized User & App Management */}
+      {/* Admin Routes - Centralized User & App Management for Tenant Super Admins */}
       <Route path="/admin/users">
         <ProtectedRoute component={AdminUsersPage} />
       </Route>
       <Route path="/admin/users/add">
-        <ProtectedRoute component={AddUserPage} />
+        <ProtectedRoute component={AdminAddUserPage} />
       </Route>
       <Route path="/admin/apps">
         <ProtectedRoute component={AdminAppsPage} />
       </Route>
       <Route path="/admin/apps/:id">
-        <ProtectedRoute component={AppDetailPage} />
+        <ProtectedRoute component={AdminAppDetailPage} />
       </Route>
       <Route path="/admin/apps/:id/roles/add">
-        <ProtectedRoute component={AddRolePage} />
+        <ProtectedRoute component={AdminAddRolePage} />
       </Route>
 
-      {/* Redirects from old per-app user management to centralized admin */}
+      {/* Redirects from old per-app user management to /admin */}
       <Route path="/accounting/users">
         <Redirect to="/admin/users" />
       </Route>
@@ -418,9 +435,82 @@ function Router() {
       <Route path="/fixed-assets/users">
         <Redirect to="/admin/users" />
       </Route>
+      {/* Redirects from old /tenant-admin routes to new /admin structure */}
+      <Route path="/tenant-admin/users">
+        <Redirect to="/admin/users" />
+      </Route>
+      <Route path="/tenant-admin/apps">
+        <Redirect to="/admin/apps" />
+      </Route>
 
+      {/* Admin - Billing, Subscription, Support, Settings */}
+      <Route path="/admin/billing">
+        <ProtectedRoute component={AdminBillingPage} />
+      </Route>
+      <Route path="/admin/subscription">
+        <ProtectedRoute component={AdminSubscriptionPage} />
+      </Route>
+      <Route path="/admin/support">
+        <ProtectedRoute component={AdminSupportPage} />
+      </Route>
+      <Route path="/admin/settings">
+        <ProtectedRoute component={AdminSettingsPage} />
+      </Route>
+
+      {/* Redirects from old /account and /settings routes */}
       <Route path="/settings">
-        <ProtectedRoute component={SettingsPage} />
+        <Redirect to="/admin/settings" />
+      </Route>
+      <Route path="/account/profile">
+        <Redirect to="/admin/settings" />
+      </Route>
+      <Route path="/account/billing">
+        <Redirect to="/admin/billing" />
+      </Route>
+      <Route path="/account/subscription">
+        <Redirect to="/admin/subscription" />
+      </Route>
+      <Route path="/account/support">
+        <Redirect to="/admin/support" />
+      </Route>
+
+      {/* Platform Portal Routes (for Qorpy platform owners - separate from tenant auth) */}
+      <Route path="/platform/login" component={PlatformLoginPage} />
+      <Route path="/platform/dashboard" component={PlatformDashboardPage} />
+      <Route path="/platform/tenants" component={PlatformTenantsPage} />
+      <Route path="/platform/subscriptions" component={PlatformSubscriptionsPage} />
+      <Route path="/platform/categories" component={PlatformCategoriesPage} />
+      <Route path="/platform/apps" component={PlatformAppsPage} />
+      <Route path="/platform/team" component={PlatformTeamPage} />
+      <Route path="/platform/support" component={PlatformSupportPage} />
+      <Route path="/platform/settings" component={PlatformSettingsPage} />
+      {/* Redirect old platform admin routes */}
+      <Route path="/platform-admin/login">
+        <Redirect to="/platform/login" />
+      </Route>
+      <Route path="/platform-admin/dashboard">
+        <Redirect to="/platform/dashboard" />
+      </Route>
+      <Route path="/platform-admin/tenants">
+        <Redirect to="/platform/tenants" />
+      </Route>
+      <Route path="/platform-admin/subscriptions">
+        <Redirect to="/platform/subscriptions" />
+      </Route>
+      <Route path="/platform-admin/categories">
+        <Redirect to="/platform/categories" />
+      </Route>
+      <Route path="/platform-admin/apps">
+        <Redirect to="/platform/apps" />
+      </Route>
+      <Route path="/platform-admin/team">
+        <Redirect to="/platform/team" />
+      </Route>
+      <Route path="/platform-admin/support">
+        <Redirect to="/platform/support" />
+      </Route>
+      <Route path="/platform-admin/settings">
+        <Redirect to="/platform/settings" />
       </Route>
 
       {/* Public Pages */}
@@ -432,7 +522,6 @@ function Router() {
       <Route path="/demo" component={DemoPage} />
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/reset-password" component={ResetPasswordPage} />
-      <Route path="/admin" component={AdminPortalPage} />
 
       <Route component={NotFound} />
     </Switch>
