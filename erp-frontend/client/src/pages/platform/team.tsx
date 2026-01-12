@@ -349,7 +349,7 @@ export default function AdminTeam() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-4">
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
@@ -362,7 +362,7 @@ export default function AdminTeam() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -375,7 +375,7 @@ export default function AdminTeam() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -388,7 +388,7 @@ export default function AdminTeam() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
@@ -404,7 +404,7 @@ export default function AdminTeam() {
         </div>
 
         {/* Roles Overview */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardHeader>
             <CardTitle className="text-slate-900 dark:text-white">Role Overview</CardTitle>
             <CardDescription>Available roles and their permissions</CardDescription>
@@ -416,7 +416,7 @@ export default function AdminTeam() {
                 return (
                   <div
                     key={role.id}
-                    className="p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow"
+                    className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-lg ${role.bgColor} flex items-center justify-center`}>
@@ -436,7 +436,7 @@ export default function AdminTeam() {
         </Card>
 
         {/* Team Members Table */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>

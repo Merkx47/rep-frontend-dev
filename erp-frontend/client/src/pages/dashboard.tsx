@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/components/theme-provider";
 import { QorpyBot } from "@/components/qorpy-bot";
-import { LogOut, Sun, Moon, ChevronRight, Menu, X, Settings } from "lucide-react";
+import { LogOut, Sun, Moon, ChevronRight, Menu, X } from "lucide-react";
 import { useState } from "react";
 import {
   AccountingIcon,
@@ -263,10 +263,7 @@ export default function Dashboard() {
                     className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                     onClick={() => setSidebarOpen(false)}
                   >
-                    <span className="flex items-center gap-3">
-                      <Settings className="w-4 h-4" />
-                      Account Management
-                    </span>
+                    <span>Account Management</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </Link>

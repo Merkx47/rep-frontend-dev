@@ -408,7 +408,7 @@ export default function AdminTenants() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-4">
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
@@ -421,7 +421,7 @@ export default function AdminTenants() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -434,7 +434,7 @@ export default function AdminTenants() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -447,7 +447,7 @@ export default function AdminTenants() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -465,7 +465,7 @@ export default function AdminTenants() {
         </div>
 
         {/* Tenants Table */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>

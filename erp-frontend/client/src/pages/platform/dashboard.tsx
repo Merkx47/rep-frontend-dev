@@ -205,7 +205,7 @@ export default function AdminDashboard() {
         {/* Key Metrics */}
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {/* Total Tenants */}
-          <Card className="relative overflow-hidden border-0 shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 bg-white dark:bg-slate-800 hover:shadow-xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60 transition-all duration-300 hover:-translate-y-0.5">
+          <Card className="relative overflow-hidden border border-slate-300 dark:border-slate-600 shadow-sm bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-100/80 to-transparent dark:from-indigo-900/20 rounded-bl-full" />
             <CardContent className="p-6 relative">
               <div className="flex items-start justify-between">
@@ -234,7 +234,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Monthly Recurring Revenue */}
-          <Card className="relative overflow-hidden border-0 shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 bg-white dark:bg-slate-800 hover:shadow-xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60 transition-all duration-300 hover:-translate-y-0.5">
+          <Card className="relative overflow-hidden border border-slate-300 dark:border-slate-600 shadow-sm bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-100/80 to-transparent dark:from-emerald-900/20 rounded-bl-full" />
             <CardContent className="p-6 relative">
               <div className="flex items-start justify-between">
@@ -263,7 +263,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Active Subscriptions */}
-          <Card className="relative overflow-hidden border-0 shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 bg-white dark:bg-slate-800 hover:shadow-xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60 transition-all duration-300 hover:-translate-y-0.5">
+          <Card className="relative overflow-hidden border border-slate-300 dark:border-slate-600 shadow-sm bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-100/80 to-transparent dark:from-blue-900/20 rounded-bl-full" />
             <CardContent className="p-6 relative">
               <div className="flex items-start justify-between">
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Open Tickets */}
-          <Card className="relative overflow-hidden border-0 shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 bg-white dark:bg-slate-800 hover:shadow-xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60 transition-all duration-300 hover:-translate-y-0.5">
+          <Card className="relative overflow-hidden border border-slate-300 dark:border-slate-600 shadow-sm bg-white dark:bg-slate-800 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/80 to-transparent dark:from-amber-900/20 rounded-bl-full" />
             <CardContent className="p-6 relative">
               <div className="flex items-start justify-between">
@@ -324,7 +324,7 @@ export default function AdminDashboard() {
         {/* Revenue Chart & Quick Stats */}
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Revenue Trend Chart */}
-          <Card className="lg:col-span-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="lg:col-span-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
               <div>
                 <CardTitle className="text-slate-900 dark:text-white">Revenue Trend</CardTitle>
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="absolute w-full border-t border-dashed border-slate-200 dark:border-slate-700"
+                        className="absolute w-full border-t border-dashed border-slate-300 dark:border-slate-600"
                         style={{ top: `${(i / 5) * 100}%` }}
                       />
                     ))}
@@ -436,7 +436,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Quick Stats */}
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardHeader>
               <CardTitle className="text-slate-900 dark:text-white">Quick Stats</CardTitle>
               <CardDescription>Platform health indicators</CardDescription>
@@ -486,7 +486,7 @@ export default function AdminDashboard() {
         {/* Recent Tenants & Tickets */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Recent Tenants */}
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-slate-900 dark:text-white">Recent Tenants</CardTitle>
@@ -539,7 +539,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Recent Tickets */}
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-slate-900 dark:text-white">Recent Tickets</CardTitle>

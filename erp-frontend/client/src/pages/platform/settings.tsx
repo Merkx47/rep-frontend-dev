@@ -188,7 +188,7 @@ export default function AdminSettings() {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-md w-full mx-4 max-h-[80vh] overflow-hidden">
-          <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <div className="p-4 border-b border-slate-300 dark:border-slate-600 flex items-center justify-between">
             <h3 className="font-semibold text-slate-900 dark:text-white">
               Select {label}
             </h3>
@@ -206,7 +206,7 @@ export default function AdminSettings() {
                   type="color"
                   value={customColor}
                   onChange={(e) => setCustomColor(e.target.value)}
-                  className="w-12 h-10 rounded cursor-pointer border border-slate-200 dark:border-slate-700"
+                  className="w-12 h-10 rounded cursor-pointer border border-slate-300 dark:border-slate-600"
                 />
                 <Input
                   value={customColor}
@@ -354,7 +354,7 @@ export default function AdminSettings() {
 
           {/* General Settings */}
           <TabsContent value="general" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Platform Information</CardTitle>
                 <CardDescription>Basic information about your platform</CardDescription>
@@ -478,7 +478,7 @@ export default function AdminSettings() {
 
           {/* Branding Settings */}
           <TabsContent value="branding" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Logo & Branding</CardTitle>
                 <CardDescription>Customize your platform's visual identity</CardDescription>
@@ -487,7 +487,7 @@ export default function AdminSettings() {
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-4">
                     <Label>Primary Logo</Label>
-                    <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
+                    <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
                       {logoPreview ? (
                         <div className="relative">
                           <img
@@ -534,7 +534,7 @@ export default function AdminSettings() {
                   </div>
                   <div className="space-y-4">
                     <Label>Favicon</Label>
-                    <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
+                    <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
                       {faviconPreview ? (
                         <div className="relative inline-block">
                           <img
@@ -588,10 +588,10 @@ export default function AdminSettings() {
                       <Label className="text-sm">Primary Color</Label>
                       <button
                         onClick={() => setShowPrimaryPicker(true)}
-                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
+                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
                       >
                         <div
-                          className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700"
+                          className="w-10 h-10 rounded-lg border border-slate-300 dark:border-slate-600"
                           style={{ backgroundColor: primaryColor }}
                         />
                         <div className="text-left">
@@ -606,10 +606,10 @@ export default function AdminSettings() {
                       <Label className="text-sm">Secondary Color</Label>
                       <button
                         onClick={() => setShowSecondaryPicker(true)}
-                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
+                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
                       >
                         <div
-                          className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700"
+                          className="w-10 h-10 rounded-lg border border-slate-300 dark:border-slate-600"
                           style={{ backgroundColor: secondaryColor }}
                         />
                         <div className="text-left">
@@ -624,10 +624,10 @@ export default function AdminSettings() {
                       <Label className="text-sm">Accent Color</Label>
                       <button
                         onClick={() => setShowAccentPicker(true)}
-                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
+                        className="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 hover:border-indigo-400 transition-colors bg-white dark:bg-slate-900"
                       >
                         <div
-                          className="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700"
+                          className="w-10 h-10 rounded-lg border border-slate-300 dark:border-slate-600"
                           style={{ backgroundColor: accentColor }}
                         />
                         <div className="text-left">
@@ -710,7 +710,7 @@ export default function AdminSettings() {
 
           {/* Security Settings */}
           <TabsContent value="security" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Authentication Settings</CardTitle>
                 <CardDescription>Configure login and security options</CardDescription>
@@ -802,7 +802,7 @@ export default function AdminSettings() {
 
           {/* Notification Settings */}
           <TabsContent value="notifications" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Email Notifications</CardTitle>
                 <CardDescription>Configure when to send email notifications</CardDescription>
@@ -861,7 +861,7 @@ export default function AdminSettings() {
 
           {/* API Settings */}
           <TabsContent value="api" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">API Configuration</CardTitle>
                 <CardDescription>Manage API keys and access settings</CardDescription>
@@ -963,7 +963,7 @@ export default function AdminSettings() {
 
           {/* Database Settings */}
           <TabsContent value="database" className="space-y-6">
-            <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-slate-900 dark:text-white">Database Status</CardTitle>
                 <CardDescription>View database health and perform maintenance</CardDescription>
@@ -990,7 +990,7 @@ export default function AdminSettings() {
                 <div className="pt-4 border-t space-y-4">
                   <h4 className="font-medium text-slate-900 dark:text-white">Maintenance</h4>
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600">
                       <h5 className="font-medium text-slate-900 dark:text-white mb-2">Database Backup</h5>
                       <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                         Last backup: Today at 3:00 AM
@@ -1000,7 +1000,7 @@ export default function AdminSettings() {
                         Backup Now
                       </Button>
                     </div>
-                    <div className="p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                    <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600">
                       <h5 className="font-medium text-slate-900 dark:text-white mb-2">Clear Cache</h5>
                       <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                         Cache size: 128 MB

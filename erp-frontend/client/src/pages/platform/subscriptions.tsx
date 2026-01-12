@@ -232,7 +232,7 @@ export default function AdminSubscriptions() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-4">
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
@@ -245,7 +245,7 @@ export default function AdminSubscriptions() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -258,7 +258,7 @@ export default function AdminSubscriptions() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -273,7 +273,7 @@ export default function AdminSubscriptions() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -414,7 +414,7 @@ export default function AdminSubscriptions() {
                   className={`relative border-2 bg-white dark:bg-slate-800 flex flex-col ${
                     plan.isPopular
                       ? "border-indigo-500 dark:border-indigo-400 shadow-lg shadow-indigo-500/10"
-                      : "border-slate-200 dark:border-slate-700"
+                      : "border-slate-300 dark:border-slate-600"
                   }`}
                 >
                   {plan.isPopular && (
@@ -617,7 +617,7 @@ export default function AdminSubscriptions() {
               {mockAddons.map((addon) => (
                 <Card
                   key={addon.id}
-                  className={`border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 ${
+                  className={`border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 ${
                     !addon.isActive ? "opacity-60" : ""
                   }`}
                 >

@@ -407,7 +407,7 @@ export default function AdminCategories() {
                       type="color"
                       value={selectedColor}
                       onChange={(e) => setSelectedColor(e.target.value.toUpperCase())}
-                      className="w-12 h-10 rounded cursor-pointer border border-slate-200 dark:border-slate-700"
+                      className="w-12 h-10 rounded cursor-pointer border border-slate-300 dark:border-slate-600"
                     />
                     <Input
                       value={customColorInput}
@@ -547,7 +547,7 @@ export default function AdminCategories() {
 
         {/* Stats */}
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
@@ -562,7 +562,7 @@ export default function AdminCategories() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -577,7 +577,7 @@ export default function AdminCategories() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -595,7 +595,7 @@ export default function AdminCategories() {
         </div>
 
         {/* Categories Table */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -715,7 +715,7 @@ export default function AdminCategories() {
         </Card>
 
         {/* Category Cards Preview */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardHeader>
             <CardTitle className="text-slate-900 dark:text-white">Category Preview</CardTitle>
             <CardDescription>How categories appear in the dashboard</CardDescription>

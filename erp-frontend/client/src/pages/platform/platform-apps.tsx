@@ -290,7 +290,7 @@ export default function AdminApps() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-4">
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
@@ -303,7 +303,7 @@ export default function AdminApps() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
@@ -316,7 +316,7 @@ export default function AdminApps() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
@@ -329,7 +329,7 @@ export default function AdminApps() {
               </div>
             </CardContent>
           </Card>
-          <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -345,7 +345,7 @@ export default function AdminApps() {
         </div>
 
         {/* Filters */}
-        <Card className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <Card className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
           <CardContent className="p-4">
             <div className="flex flex-wrap gap-4">
               <div className="relative flex-1 min-w-[200px]">
@@ -725,7 +725,7 @@ export default function AdminApps() {
                   ].map((role) => (
                     <div
                       key={role.name}
-                      className="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700"
+                      className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600"
                     >
                       <div>
                         <p className="font-medium text-sm text-slate-900 dark:text-white">{role.name}</p>

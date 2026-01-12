@@ -196,7 +196,7 @@ export default function AdminBillingPage() {
               {mockPaymentMethods.map((method) => (
                 <div
                   key={method.id}
-                  className="flex items-center justify-between p-4 rounded-lg border"
+                  className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-8 rounded bg-gradient-to-r from-slate-700 to-slate-900 flex items-center justify-center">

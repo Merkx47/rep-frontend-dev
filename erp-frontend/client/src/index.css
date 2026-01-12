@@ -15,11 +15,11 @@
   --background: 0 0% 100%;
   --foreground: 214 14% 18%; /* --gray--4: #2b3036 */
 
-  --border: 200 6% 93%; /* --gray--2: #eef0f1 */
+  --border: 214 20% 80%; /* Darker border for better visibility */
 
   --card: 0 0% 100%;
   --card-foreground: 214 14% 18%;
-  --card-border: 200 6% 93%;
+  --card-border: 214 20% 80%; /* Darker card border */
 
   --sidebar: 214 14% 18%; /* Dark gray for sidebar */
   --sidebar-foreground: 200 6% 97%;
@@ -58,7 +58,7 @@
   --warning: 27 88% 55%; /* --orange--3: #f17b2c */
   --warning-foreground: 0 0% 100%;
 
-  --input: 200 6% 93%;
+  --input: 214 20% 80%; /* Darker input border */
   --ring: 227 89% 63%;
 
   --chart-1: 227 89% 63%; /* Primary blue */
@@ -119,11 +119,11 @@
   --background: 216 13% 11%; /* --gray--5: #191c1f */
   --foreground: 200 6% 97%;
 
-  --border: 210 9% 25%;
+  --border: 215 20% 40%; /* Lighter border for dark mode visibility */
 
   --card: 214 14% 14%;
   --card-foreground: 200 6% 97%;
-  --card-border: 210 9% 25%;
+  --card-border: 215 20% 40%; /* Lighter card border for dark mode */
 
   --sidebar: 220 13% 8%;
   --sidebar-foreground: 200 6% 97%;
@@ -159,7 +159,7 @@
   --warning: 27 80% 50%;
   --warning-foreground: 0 0% 100%;
 
-  --input: 210 9% 25%;
+  --input: 215 20% 40%; /* Lighter input border for dark mode */
   --ring: 227 89% 68%;
 
   --chart-1: 227 89% 68%;
