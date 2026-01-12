@@ -538,7 +538,7 @@ export default function AdminApps() {
                       {selectedApp.features.map((feature, index) => (
                         <div
                           key={index}
-                          className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50"
+                          className="flex items-center gap-2 p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50"
                         >
                           <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                           <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -553,7 +553,7 @@ export default function AdminApps() {
                       {["Starter", "Professional", "Enterprise"].map((plan) => (
                         <div
                           key={plan}
-                          className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50"
+                          className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50"
                         >
                           <span className="font-medium text-slate-700 dark:text-slate-300">
                             {plan}
@@ -569,13 +569,13 @@ export default function AdminApps() {
                   </TabsContent>
                   <TabsContent value="stats" className="mt-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50 text-center">
+                      <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 text-center">
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
                           {selectedApp.tenantsUsing}
                         </p>
                         <p className="text-sm text-slate-500">Active Tenants</p>
                       </div>
-                      <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50 text-center">
+                      <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 text-center">
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
                           {selectedApp.lastUpdated}
                         </p>
@@ -663,7 +663,7 @@ export default function AdminApps() {
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <Label>Core App</Label>
                     <p className="text-xs text-slate-500">Core apps cannot be disabled</p>
@@ -701,7 +701,7 @@ export default function AdminApps() {
             {selectedApp && (
               <div className="space-y-4 py-4">
                 {/* App Header */}
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div
                     className="w-10 h-10 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: `${selectedApp.color}20` }}
@@ -743,7 +743,7 @@ export default function AdminApps() {
                     {selectedApp.features.map((feature) => (
                       <div
                         key={feature}
-                        className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50"
+                        className="flex items-center justify-between p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50"
                       >
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-emerald-500" />

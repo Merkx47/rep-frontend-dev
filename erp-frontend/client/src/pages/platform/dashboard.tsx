@@ -442,7 +442,7 @@ export default function AdminDashboard() {
               <CardDescription>Platform health indicators</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span className="text-sm text-slate-600 dark:text-slate-300">System Status</span>
@@ -451,28 +451,28 @@ export default function AdminDashboard() {
                   Operational
                 </Badge>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
                   <Activity className="w-4 h-4 text-slate-500" />
                   <span className="text-sm text-slate-600 dark:text-slate-300">Avg Response Time</span>
                 </div>
                 <span className="text-sm font-medium text-slate-900 dark:text-white">124ms</span>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-slate-500" />
                   <span className="text-sm text-slate-600 dark:text-slate-300">Active Users Today</span>
                 </div>
                 <span className="text-sm font-medium text-slate-900 dark:text-white">1,247</span>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
                   <AppWindow className="w-4 h-4 text-slate-500" />
                   <span className="text-sm text-slate-600 dark:text-slate-300">API Requests (24h)</span>
                 </div>
                 <span className="text-sm font-medium text-slate-900 dark:text-white">45.2K</span>
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="w-4 h-4 text-slate-500" />
                   <span className="text-sm text-slate-600 dark:text-slate-300">Conversion Rate</span>
@@ -557,7 +557,7 @@ export default function AdminDashboard() {
                 {recentTickets.map((ticket) => (
                   <div
                     key={ticket.id}
-                    className="flex items-start gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors cursor-pointer"
+                    className="flex items-start gap-4 p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors cursor-pointer"
                   >
                     <div className="mt-0.5">{getTicketStatusIcon(ticket.status)}</div>
                     <div className="flex-1 min-w-0">

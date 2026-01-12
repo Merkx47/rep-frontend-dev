@@ -717,7 +717,7 @@ export default function AdminSettings() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
                         <Lock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
@@ -730,7 +730,7 @@ export default function AdminSettings() {
                     <Switch defaultChecked />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
@@ -743,7 +743,7 @@ export default function AdminSettings() {
                     <Switch defaultChecked />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                         <Shield className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -808,7 +808,7 @@ export default function AdminSettings() {
                 <CardDescription>Configure when to send email notifications</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">New Tenant Registration</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Get notified when a new tenant signs up</p>
@@ -816,7 +816,7 @@ export default function AdminSettings() {
                   <Switch defaultChecked />
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">Subscription Changes</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Notify when tenants upgrade or downgrade</p>
@@ -824,7 +824,7 @@ export default function AdminSettings() {
                   <Switch defaultChecked />
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">Payment Failures</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Alert when a payment fails</p>
@@ -832,7 +832,7 @@ export default function AdminSettings() {
                   <Switch defaultChecked />
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">Support Tickets</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Notify on new support tickets</p>
@@ -840,7 +840,7 @@ export default function AdminSettings() {
                   <Switch defaultChecked />
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">System Alerts</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Critical system notifications</p>
@@ -848,7 +848,7 @@ export default function AdminSettings() {
                   <Switch defaultChecked />
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-white">Weekly Reports</p>
                     <p className="text-sm text-slate-500 dark:text-slate-400">Receive weekly platform analytics</p>
@@ -949,7 +949,7 @@ export default function AdminSettings() {
                       className="bg-white dark:bg-slate-900"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div>
                       <p className="font-medium text-slate-900 dark:text-white">Enable Webhooks</p>
                       <p className="text-sm text-slate-500 dark:text-slate-400">Send events to your webhook endpoint</p>
@@ -1014,7 +1014,7 @@ export default function AdminSettings() {
                 </div>
 
                 <div className="pt-4 border-t">
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div>
                       <p className="font-medium text-slate-900 dark:text-white">Automatic Backups</p>
                       <p className="text-sm text-slate-500 dark:text-slate-400">Daily backups at 3:00 AM WAT</p>

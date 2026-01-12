@@ -328,7 +328,7 @@ export default function AdminTeam() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                   <p className="text-sm text-slate-600 dark:text-slate-300">
                     The invited member will receive an email with instructions to set up their account.
                   </p>

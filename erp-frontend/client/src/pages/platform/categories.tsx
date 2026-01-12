@@ -388,7 +388,7 @@ export default function AdminCategories() {
                   <Label>Category Color</Label>
 
                   {/* Selected Color Preview */}
-                  <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center gap-4 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <div
                       className="w-12 h-12 rounded-lg border-2 border-white shadow-md"
                       style={{ backgroundColor: selectedColor }}

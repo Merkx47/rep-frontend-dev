@@ -659,7 +659,7 @@ export default function AdminTenants() {
 
                 {/* Contact Info */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <Mail className="w-5 h-5 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">Email</p>
@@ -668,7 +668,7 @@ export default function AdminTenants() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <Phone className="w-5 h-5 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">Phone</p>
@@ -677,7 +677,7 @@ export default function AdminTenants() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <Globe className="w-5 h-5 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">Website</p>
@@ -686,7 +686,7 @@ export default function AdminTenants() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="flex items-center gap-3 p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <Calendar className="w-5 h-5 text-slate-500" />
                     <div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">Created</p>
@@ -699,25 +699,25 @@ export default function AdminTenants() {
 
                 {/* Usage Stats */}
                 <div className="grid grid-cols-4 gap-4">
-                  <div className="text-center p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="text-center p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {selectedTenant.users}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">Users</p>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="text-center p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {selectedTenant.apps}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">Apps</p>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="text-center p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       ₦{(selectedTenant.mrr / 1000).toFixed(0)}K
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400">MRR</p>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                  <div className="text-center p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                     <p className="text-2xl font-bold text-slate-900 dark:text-white">
                       {selectedTenant.country}
                     </p>

@@ -457,7 +457,7 @@ export default function AdminSubscriptions() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                    <div className="mt-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                    <div className="mt-4 p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                       <div className="flex items-baseline gap-1">
                         <span className="text-3xl font-bold text-slate-900 dark:text-white">
                           ₦{plan.monthlyPrice.toLocaleString()}
@@ -472,13 +472,13 @@ export default function AdminSubscriptions() {
                   <CardContent className="space-y-4 flex-1 flex flex-col">
                     {/* Limits */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                      <div className="flex items-center gap-2 p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                         <Users className="w-4 h-4 text-indigo-500" />
                         <span className="text-sm text-slate-600 dark:text-slate-300">
                           {plan.maxUsers === -1 ? "Unlimited" : plan.maxUsers} users
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                      <div className="flex items-center gap-2 p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                         <Building2 className="w-4 h-4 text-indigo-500" />
                         <span className="text-sm text-slate-600 dark:text-slate-300">
                           {plan.maxApps === -1 ? "All" : plan.maxApps} apps
@@ -588,7 +588,7 @@ export default function AdminSubscriptions() {
                       </div>
                     </div>
                     {editingAddon && (
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+                      <div className="flex items-center justify-between p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50">
                         <div>
                           <Label>Status</Label>
                           <p className="text-xs text-slate-500">Enable or disable this add-on</p>
