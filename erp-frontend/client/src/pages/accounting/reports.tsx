@@ -180,7 +180,7 @@ export default function FinancialReportsPage() {
               <Card key={report.id} className="border-border/60 hover:border-primary/50 transition-colors cursor-pointer">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                       <Icon className="w-5 h-5 text-primary" />
                     </div>
                     <div>

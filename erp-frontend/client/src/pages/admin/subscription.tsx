@@ -310,7 +310,7 @@ export default function AdminSubscriptionPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="py-4">
-              <div className="p-4 rounded-lg bg-muted">
+              <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted">
                 <div className="flex justify-between items-center">
                   <span className="text-sm">New Monthly Cost</span>
                   <span className="text-lg font-bold">

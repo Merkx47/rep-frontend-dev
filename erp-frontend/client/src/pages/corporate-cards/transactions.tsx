@@ -232,7 +232,7 @@ export default function TransactionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                   <Receipt className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -245,7 +245,7 @@ export default function TransactionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-green-100 dark:bg-green-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-green-100 dark:bg-green-900/30">
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
@@ -258,7 +258,7 @@ export default function TransactionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-yellow-100 dark:bg-yellow-900/30">
                   <Clock className="w-6 h-6 text-yellow-600" />
                 </div>
                 <div>
@@ -271,7 +271,7 @@ export default function TransactionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-red-100 dark:bg-red-900/30">
                   <TrendingDown className="w-6 h-6 text-red-600" />
                 </div>
                 <div>

@@ -235,7 +235,7 @@ export default function LimitsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                   <Wallet className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -248,7 +248,7 @@ export default function LimitsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-blue-100 dark:bg-blue-900/30">
                   <TrendingUp className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
@@ -261,7 +261,7 @@ export default function LimitsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-yellow-100 dark:bg-yellow-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-yellow-100 dark:bg-yellow-900/30">
                   <AlertTriangle className="w-6 h-6 text-yellow-600" />
                 </div>
                 <div>
@@ -274,7 +274,7 @@ export default function LimitsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-red-100 dark:bg-red-900/30">
+                <div className="p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-red-100 dark:bg-red-900/30">
                   <Users className="w-6 h-6 text-red-600" />
                 </div>
                 <div>

@@ -1242,17 +1242,17 @@ export default function HRSettingsPage() {
                     <Separator />
 
                     <div className="grid gap-4 sm:grid-cols-3">
-                      <div className="p-4 rounded-lg bg-muted/50">
+                      <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted/50">
                         <Clock className="h-6 w-6 mb-2" style={{ color: moduleColor }} />
                         <p className="font-medium text-sm">Real-time Tracking</p>
                         <p className="text-xs text-muted-foreground">Instant attendance sync</p>
                       </div>
-                      <div className="p-4 rounded-lg bg-muted/50">
+                      <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted/50">
                         <UserCheck className="h-6 w-6 mb-2" style={{ color: moduleColor }} />
                         <p className="font-medium text-sm">Biometric Support</p>
                         <p className="text-xs text-muted-foreground">Face & fingerprint</p>
                       </div>
-                      <div className="p-4 rounded-lg bg-muted/50">
+                      <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted/50">
                         <Target className="h-6 w-6 mb-2" style={{ color: moduleColor }} />
                         <p className="font-medium text-sm">Geofencing</p>
                         <p className="text-xs text-muted-foreground">Location verification</p>

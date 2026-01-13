@@ -569,7 +569,7 @@ export default function SettingsPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                       <Users className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -582,7 +582,7 @@ export default function SettingsPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-red-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-red-500/10">
                       <Shield className="h-5 w-5 text-red-500" />
                     </div>
                     <div>
@@ -595,7 +595,7 @@ export default function SettingsPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-yellow-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-yellow-500/10">
                       <Mail className="h-5 w-5 text-yellow-500" />
                     </div>
                     <div>
@@ -608,7 +608,7 @@ export default function SettingsPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gray-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-gray-500/10">
                       <Eye className="h-5 w-5 text-gray-500" />
                     </div>
                     <div>

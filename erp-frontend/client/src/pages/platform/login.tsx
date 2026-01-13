@@ -299,15 +299,15 @@ export default function AdminLoginPage() {
           <div className="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 uppercase tracking-wide">Quick Access</p>
             <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+              <div className="text-center p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50">
                 <Users className="w-5 h-5 mx-auto text-indigo-600 dark:text-indigo-400 mb-1" />
                 <p className="text-xs text-gray-600 dark:text-gray-300">Tenants</p>
               </div>
-              <div className="text-center p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+              <div className="text-center p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50">
                 <BarChart3 className="w-5 h-5 mx-auto text-purple-600 dark:text-purple-400 mb-1" />
                 <p className="text-xs text-gray-600 dark:text-gray-300">Analytics</p>
               </div>
-              <div className="text-center p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+              <div className="text-center p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50">
                 <Shield className="w-5 h-5 mx-auto text-green-600 dark:text-green-400 mb-1" />
                 <p className="text-xs text-gray-600 dark:text-gray-300">Security</p>
               </div>

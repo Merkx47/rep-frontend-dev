@@ -279,7 +279,7 @@ export default function FixedAssetsSettingsPage() {
                   </div>
                   <Switch defaultChecked />
                 </div>
-                <div className="p-4 rounded-lg bg-muted">
+                <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted">
                   <Label className="text-sm">Preview</Label>
                   <p className="text-lg font-mono mt-1">FA-2024-001</p>
                 </div>

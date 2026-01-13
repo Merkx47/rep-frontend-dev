@@ -459,7 +459,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                       <Package className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -472,7 +472,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-emerald-500/10">
                       <TrendingUp className="h-5 w-5 text-emerald-500" />
                     </div>
                     <div>
@@ -485,7 +485,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-blue-500/10">
                       <Layers className="h-5 w-5 text-blue-500" />
                     </div>
                     <div>
@@ -498,7 +498,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-purple-500/10">
                       <Box className="h-5 w-5 text-purple-500" />
                     </div>
                     <div>
@@ -674,7 +674,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                       <Wrench className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -687,7 +687,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-emerald-500/10">
                       <TrendingUp className="h-5 w-5 text-emerald-500" />
                     </div>
                     <div>
@@ -700,7 +700,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-blue-500/10">
                       <Layers className="h-5 w-5 text-blue-500" />
                     </div>
                     <div>
@@ -713,7 +713,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-purple-500/10">
                       <Clock className="h-5 w-5 text-purple-500" />
                     </div>
                     <div>
@@ -894,7 +894,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                       <FolderOpen className="h-5 w-5 text-primary" />
                     </div>
                     <div>
@@ -907,7 +907,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-blue-500/10">
                       <Package className="h-5 w-5 text-blue-500" />
                     </div>
                     <div>
@@ -920,7 +920,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-purple-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-purple-500/10">
                       <Wrench className="h-5 w-5 text-purple-500" />
                     </div>
                     <div>
@@ -933,7 +933,7 @@ export default function SalesPage() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-emerald-500/10">
+                    <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-emerald-500/10">
                       <TrendingUp className="h-5 w-5 text-emerald-500" />
                     </div>
                     <div>

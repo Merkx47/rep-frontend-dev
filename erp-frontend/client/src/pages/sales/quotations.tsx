@@ -289,7 +289,7 @@ export default function QuotationsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
+                <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-primary/10">
                   <FileCheck className="h-5 w-5 text-primary" />
                 </div>
                 <div>
@@ -302,7 +302,7 @@ export default function QuotationsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-amber-500/10">
+                <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-amber-500/10">
                   <Clock className="h-5 w-5 text-amber-500" />
                 </div>
                 <div>
@@ -315,7 +315,7 @@ export default function QuotationsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-emerald-500/10">
+                <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-emerald-500/10">
                   <CheckCircle className="h-5 w-5 text-emerald-500" />
                 </div>
                 <div>
@@ -328,7 +328,7 @@ export default function QuotationsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-500/10">
+                <div className="p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-blue-500/10">
                   <TrendingUp className="h-5 w-5 text-blue-500" />
                 </div>
                 <div>

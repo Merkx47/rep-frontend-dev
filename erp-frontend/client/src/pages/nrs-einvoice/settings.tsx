@@ -742,7 +742,7 @@ export default function NRSSettingsPage() {
                 <CardDescription>Manage your digital signing certificate</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="p-4 rounded-lg bg-muted">
+                <div className="p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-muted">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <span className="font-medium">Digital Certificate Active</span>
